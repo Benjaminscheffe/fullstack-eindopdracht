@@ -1,0 +1,43 @@
+header {
+  background: black;
+  color: #FFF;
+  height: 100px;
+  display: flex;
+  align-items: center;
+
+  @media only screen and (max-width: 767px) {
+    height: 80px;
+  }
+
+  @media only screen and (max-width: 500px) {
+    height: 60px;
+  }
+
+  a {
+    text-decoration: none;
+    color: #FFF;
+  }
+
+  .menuBtn {
+    width: 50px;
+
+    i {
+      color: #FFF;
+      font-size: 1.5rem;
+    }
+  }
+
+  .menu {
+    position: fixed;
+    top: 100px;
+    z-index: 10;
+    background: #000;
+    padding: 1rem 2rem;
+    line-height: 1.8;
+    display: none;
+
+    &.open {
+      display: block;
+    }
+  }
+}
