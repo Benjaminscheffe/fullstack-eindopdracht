@@ -13,9 +13,21 @@ header {
     height: 60px;
   }
 
-  a {
+  nav ul a {
+    color: #FFF;
+    text-decoration: none !important;
+    &:visited {
+      color: grey;
+    }
+  }
+
+  .default-link {
     text-decoration: none;
     color: #FFF;
+  }
+
+  .active-link {
+    border-bottom: 1px solid #FFF;
   }
 
   .menuBtn {
@@ -35,6 +47,14 @@ header {
     padding: 1rem 2rem;
     line-height: 1.8;
     display: none;
+
+    @media only screen and (max-width: 767px) {
+      top: 80px;
+    }
+
+    @media only screen and (max-width: 500px) {
+      top: 60px;
+    }
 
     &.open {
       display: block;

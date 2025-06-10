@@ -1,9 +1,9 @@
-import './productsOverview.scss';
+import './ProductsOverview.scss';
 import BeatBlock from "../../components/beatBlock/BeatBlock.jsx";
 
 function productsOverview() {
     return (
-        <>
+        <main>
             <section className="main-content-block">
                 <div className="container">
                     <h1>Listen to all the beats</h1>
@@ -19,7 +19,7 @@ function productsOverview() {
                             <option>north-style</option>
                             <option>south-style</option>
                         </select>
-                    </label> <br /><br />
+                    </label> <br />
 
                     <div className="beats-container">
                         <BeatBlock />
@@ -29,7 +29,7 @@ function productsOverview() {
                     </div>
                 </div>
             </section>
-        </>
+        </main>
     );
 }
 

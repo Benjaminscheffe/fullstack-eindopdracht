@@ -1,4 +1,4 @@
-import './beatBlock.scss';
+import './BeatBlock.scss';
 
 function BeatBlock() {
     return (

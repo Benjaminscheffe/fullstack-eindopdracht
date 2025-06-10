@@ -83,6 +83,19 @@ body {
   font-size: 16px;
 }
 
+main {
+  min-height: calc(100vh - 260px);
+  height: 100%;
+
+  @media only screen and (max-width: 767px) {
+    min-height: calc(100vh - 240px);
+  }
+
+  @media only screen and (max-width: 500px) {
+    min-height: calc(100vh - 220px);
+  }
+}
+
 .main-content-block {
   padding: 5rem 0 5rem;
 
@@ -131,6 +144,7 @@ body {
 
 .flexBox {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 }
@@ -142,6 +156,68 @@ body {
 
   &-flex-start {
     justify-content: flex-start;
+  }
+
+  &-center {
+    justify-content: center;
+  }
+}
+
+.align-items {
+  &-top {
+    align-items: start;
+  }
+
+  &-stretch {
+    align-items: stretch;
+  }
+}
+
+.flex {
+  &-20 {
+       flex: 0 0 20%;
+     }
+  &-30 {
+    flex: 0 0 30%;
+  }
+  &-40 {
+    flex: 0 0 40%;
+  }
+  &-50 {
+    flex: 0 0 50%;
+  }
+  &-60 {
+    flex: 0 0 60%;
+  }
+  &-70 {
+    flex: 0 0 70%;
+  }
+  &-80 {
+    flex: 0 0 80%;
+  }
+
+  @media only screen and (max-width: 767px) {
+    &-20 {
+      flex: 0 0 100%;
+    }
+    &-30 {
+      flex: 0 0 100%;
+    }
+    &-40 {
+      flex: 0 0 100%;
+    }
+    &-50 {
+      flex: 0 0 100%;
+    }
+    &-60 {
+      flex: 0 0 100%;
+    }
+    &-70 {
+      flex: 0 0 100%;
+    }
+    &-80 {
+      flex: 0 0 100%;
+    }
   }
 }
 
@@ -159,7 +235,13 @@ body {
   }
 }
 
-.justify-content
+.w-100 {
+  width: 100%;
+}
+
+.hide {
+  display: none;
+}
 
 /*////////////////////////
     2. Typography
@@ -190,15 +272,20 @@ button {
   font-family: inherit;
 }
 
-a,
-a:link,
-a:visited {
-  color: #899CA0;
+a {
+  text-decoration: none;
+}
+
+p > a {
   text-decoration: underline;
 }
 
 a:hover {
   text-decoration: none;
+}
+
+.font-weight-500 {
+  font-weight: 500;
 }
 
 
@@ -208,8 +295,8 @@ a:hover {
   background: #000;
   border: none;
   color: #FFF;
-  padding: 0.75rem 1.5rem;
-  font-size: 1.1rem;
+  padding: 0.5rem 1em;
+  font-size: 1rem;
   text-transform: uppercase;
   border-radius: 2px;
   font-weight: 500;
@@ -218,6 +305,11 @@ a:hover {
   &-small {
     padding: 0.25rem 0.5rem;
     font-size: 0.9rem;
+  }
+
+  &-big {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.2rem;
   }
 
   &-border {
@@ -285,127 +377,34 @@ a:hover {
   }
 }
 
+/* Forms */
 
-/* Beat block */
-
-.beats-container {
-  .beat-block {
-    background: #000;
-    color: #FFF;
-    padding: 0 2rem 0 0;
-    margin-bottom: 2rem;
-
-    @media only screen and (max-width: 1200px) {
-      font-size: 1rem;
-    }
-
-    @media only screen and (max-width: 767px) {
-      flex-direction: column;
-      padding: 0 0 1rem 0;
-      gap: 1rem;
-
-      .flexBox {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      &-cta {
-        padding: 0 1rem;
-        width: 100%;
-
-        button {
-          width: 100%;
-        }
-      }
-    }
-
-    &-image {
-      width: 120px;
-      height: 120px;
-      background: url("./assets/images/ghettoblaster.jpg") center;
-      background-size: cover;
-      border-radius: 2px;
-    }
-
-    &-info {
-      h3 {
-        margin-bottom: 0.5em;
-      }
-
-      h4 {
-        margin-bottom: 0.25em;
-      }
-    }
-
-    &-cta button i {
-      color: #FFF;
-    }
-  }
+label {
+  display: block;
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
 }
 
-
-/* Visual block */
-
-.visual-block {
-  background: url("./assets/images/raw-new-york.jpg"), url("./assets/images/grunge2.jpg");
-  background-blend-mode: difference;
-  background-size: cover;
-  min-height: 40vh;
-  display: flex;
-  align-items: center;
-  padding: 4rem 0;
-  color: #FFF;
-
-   h2 {
-     font-size: 3rem;
-   }
+input {
+  display: block;
+  border-radius: 2px;
+  border: 1px solid;
+  padding: 0.25rem 0.75rem;
+  width: 100%;
 }
 
-/* Text visual block */
-
-.text-with-visual-block {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-
-  &-text {
-    flex: 0 0 60%;
-  }
-
-  &-visual {
-    flex: 0 0 30%;
-    background: url("./assets/images/ghettoblaster.jpg"), url("./assets/images/grunge.jpg");
-    background-size: cover;
-    background-blend-mode: overlay;
-    color: #FFF;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: column;
-    h3 {
-      font-size: 2.5rem;
-    }
-  }
-
-  @media only screen and (max-width: 767px) {
-    display: block;
-
-    &-text {
-      flex: 0 0 100%;
-    }
-
-    &-visual {
-      flex: 0 0 100%;
-      min-height: 400px;
-      background-position: top;
-    }
-  }
+.form-block {
+  border-bottom: 1px solid #000;
+  padding-bottom: 2rem;
+  margin-bottom: 2rem;
 }
+
 
 
 /* footer */
 
 footer {
+  height: 160px;
   padding: 3rem 0;
   background: #000;
   color: #FFF
