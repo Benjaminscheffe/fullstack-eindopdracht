@@ -1,33 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import './App.scss';
+import { Routes, Route } from 'react-router-dom';
+import LandingPage from "./pages/landingpage/Landingpage.jsx";
+import Header from "./components/header/Header.jsx";
+import ProductsOverview from "./pages/productsOverview/ProductsOverview.jsx";
+import ProductDetail from "./pages/productsOverview/productDetail/ProductDetail.jsx";
+import VisualTextBlock from "./components/visualTextBlock/VisualTextBlock.jsx";
+import LoginPage from "./pages/loginPage/LoginPage.jsx";
+import RegisterPage from "./pages/registerPage/RegisterPage.jsx";
+import NotFoundPage from "./pages/notFoundPage/NotFoundPage.jsx";
+import UserPage from "./pages/userPage/UserPage.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+        <Header />
+
+
+            <Routes>
+                <Route path="/" element={<LandingPage/>} />
+                <Route path="/beats" element={<ProductsOverview/>} />
+                <Route path="/login" element={<LoginPage/>}/>
+                <Route path="/register" element={<RegisterPage/>} />
+                <Route path="*" element={<NotFoundPage/>} />
+                <Route path="/user" element={<UserPage/>} />
+            </Routes>
+
+        <footer>
+            <div className="container">
+                <div className="flexBox">
+                    <div>
+                        <ul>
+                            <li>hallo</li>
+                            <li>contact</li>
+                            <li>dag</li>
+                        </ul>
+                    </div>
+                    <div>
+                        socials
+                    </div>
+                </div>
+            </div>
+        </footer>
     </>
   )
 }

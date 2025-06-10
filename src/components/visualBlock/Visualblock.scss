@@ -1,0 +1,14 @@
+.visual-block {
+  background: url("./../../assets/images/raw-new-york.jpg"), url("./../../assets/images/grunge2.jpg");
+  background-blend-mode: difference;
+  background-size: cover;
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+  color: #FFF;
+
+  h2 {
+    font-size: 3rem;
+  }
+}

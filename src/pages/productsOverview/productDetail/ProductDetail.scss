@@ -1,0 +1,23 @@
+.detail-page {
+  &-image {
+    width: 360px;
+    height: 360px;
+    background: url("./../../../assets/images/ghettoblaster.jpg") center;
+    background-size: cover;
+    border-radius: 2px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .detail-page {
+    .flexBox {
+      flex-direction: column;
+    }
+    &-image {
+      flex: 0 0 100%;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4/2;
+    }
+  }
+}
