@@ -13,11 +13,14 @@ header {
     height: 60px;
   }
 
-  nav ul a {
-    color: #FFF;
-    text-decoration: none !important;
-    &:visited {
-      color: grey;
+  nav ul {
+    margin-bottom: 0;
+    a {
+      color: #FFF;
+      text-decoration: none !important;
+      &:visited {
+        color: grey;
+      }
     }
   }
 

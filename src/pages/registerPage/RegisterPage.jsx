@@ -1,33 +1,85 @@
 import './RegisterPage.scss';
 import VisualTextBlock from "../../components/visualTextBlock/VisualTextBlock.jsx";
+import { useForm } from "react-hook-form";
+import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 
 function RegisterPage() {
+    const { register, handleSubmit, formState: {errors} } = useForm();
+
+    function handleFormSubmit(data) {
+        console.log(data);
+    }
+
     return (
         <main>
             <section className="container small-container">
                 <VisualTextBlock imageTitle="The beats are calling">
                     <h1>Sign up</h1>
                     <div className="form-block">
-                        <form>
-                            <label>
-                                Username
-                                <input />
-                            </label>
-                            <label>
-                                Firstname
-                                <input />
-                            </label>
-                            <label>
-                                Email
-                                <input />
-                            </label>
-                            <label>
-                                Choose your password
-                                <input />
-                            </label>
-
-
-                            <button className="btn btn-small">Register</button>
+                        <form onSubmit={handleSubmit(handleFormSubmit)}>
+                            <InputComponent
+                                inputType="text"
+                                inputName="name"
+                                inputId="name-field"
+                                inputLabel="Username"
+                                validationRules={{
+                                    required:  {
+                                        value: true,
+                                        message: 'This field is required'
+                                    },
+                                    minLength: {
+                                        value: 3,
+                                        message: 'Name must be at least 3 characters',
+                                    },
+                                    maxLength: {
+                                        value: 15,
+                                        message: 'Name may contain a maximum of 15 characters',
+                                    },
+                                }}
+                                register={register}
+                                errors={errors}
+                            />
+                            <InputComponent
+                                inputType="text"
+                                inputName="email"
+                                inputId="email-field"
+                                inputLabel="Email"
+                                validationRules={{
+                                    required:  {
+                                        value: true,
+                                        message: 'This field is required'
+                                    },
+                                    pattern: {
+                                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                                        message: "Invalid email address"
+                                    }
+                                }}
+                                register={register}
+                                errors={errors}
+                            />
+                            <InputComponent
+                                inputType="text"
+                                inputName="password"
+                                inputId="password-field"
+                                inputLabel="Password"
+                                validationRules={{
+                                    required:  {
+                                        value: true,
+                                        message: 'This field is required'
+                                    },
+                                    minLength: {
+                                        value: 6,
+                                        message: 'Name must be at least 6 characters',
+                                    },
+                                    maxLength: {
+                                        value: 12,
+                                        message: 'Name may contain a maximum of 12 characters',
+                                    },
+                                }}
+                                register={register}
+                                errors={errors}
+                            />
+                            <button type="submit" className="btn btn-small">Register</button>
                         </form>
                     </div>
                 </VisualTextBlock>

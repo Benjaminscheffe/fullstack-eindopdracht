@@ -46,6 +46,15 @@ h5 {
 
 ul {
   list-style: none;
+  margin-bottom: 1rem;
+
+  li {
+    line-height: 1.8;
+  }
+}
+
+p {
+  margin-bottom: 1rem;
 }
 
 .btnReset {
@@ -397,6 +406,13 @@ input {
   border-bottom: 1px solid #000;
   padding-bottom: 2rem;
   margin-bottom: 2rem;
+}
+
+.error-message {
+  font-size: 0.8rem;
+  font-style: italic;
+  font-weight: 700;
+  color: #FF0000;
 }
 
 

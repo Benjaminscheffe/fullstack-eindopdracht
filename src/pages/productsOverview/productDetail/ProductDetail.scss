@@ -1,16 +1,24 @@
 .detail-page {
+  &.flexBox {
+    flex-wrap: nowrap;
+  }
   &-image {
-    width: 360px;
-    height: 360px;
-    background: url("./../../../assets/images/ghettoblaster.jpg") center;
+    flex: 0 0 60%;
+    width: 100%;
+    height: 400px;
+    background: url("./../../../assets/images/ghettoblaster.jpg") top center;
     background-size: cover;
     border-radius: 2px;
+  }
+
+  &-info {
+    flex: 0 0 40%;
   }
 }
 
 @media only screen and (max-width: 767px) {
   .detail-page {
-    .flexBox {
+    &.flexBox {
       flex-direction: column;
     }
     &-image {
