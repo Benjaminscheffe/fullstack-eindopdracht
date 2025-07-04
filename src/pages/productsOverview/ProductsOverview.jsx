@@ -1,5 +1,6 @@
 import './ProductsOverview.scss';
 import BeatBlock from "../../components/beatBlock/BeatBlock.jsx";
+import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
 
 function productsOverview() {
     return (
@@ -23,9 +24,9 @@ function productsOverview() {
 
                     <div className="beats-container">
                         <BeatBlock title="title 1" artist="artist 1" bpm="90" price="9,95" image="src/assets/images/ghettoblaster.jpg">
-                            <button className="btn btn-small btn-border btnReset">
-                                Go to the beat <i className="fa-solid fa-music"></i>
-                            </button>
+
+
+                            <ButtonComponent classNames="btn-small btn-border btnReset" buttonText="Go to the beat" noteIcon={true}  />
                         </BeatBlock>
                     </div>
                 </div>
