@@ -22,10 +22,11 @@ function productsOverview() {
                     </label> <br />
 
                     <div className="beats-container">
-                        <BeatBlock />
-
-                        <BeatBlock />
-                        <BeatBlock />
+                        <BeatBlock title="title 1" artist="artist 1" bpm="90" price="9,95" image="src/assets/images/ghettoblaster.jpg">
+                            <button className="btn btn-small btn-border btnReset">
+                                Go to the beat <i className="fa-solid fa-music"></i>
+                            </button>
+                        </BeatBlock>
                     </div>
                 </div>
             </section>

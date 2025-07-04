@@ -31,9 +31,12 @@
     &-image {
       width: 120px;
       height: 120px;
-      background: url("./assets/images/ghettoblaster.jpg") center;
-      background-size: cover;
-      border-radius: 2px;
+
+      img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+      }
     }
 
     &-info {

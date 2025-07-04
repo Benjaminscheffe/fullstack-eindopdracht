@@ -62,7 +62,18 @@ function UserPage() {
 
                             <div className="aside-content-block hide" id="myBeats">
                                 <h2>My Beats</h2>
-                                <BeatBlock></BeatBlock>
+                                <BeatBlock title="title 1" artist="artist 1" bpm="90">
+                                    <button className="btn btn-small btn-border btnReset">
+                                        Edit <i className="fa-solid fa-gear"></i>
+                                    </button>
+                                </BeatBlock>
+                                <hr></hr>
+                                <h2>Bought Beats</h2>
+                                <BeatBlock title="title 1" artist="artist 1" bpm="90">
+                                    <button className="btn btn-small btn-border btnReset">
+                                        Download <i className="fa-solid fa-download"></i>
+                                    </button>
+                                </BeatBlock>
                             </div>
 
                         </div>
