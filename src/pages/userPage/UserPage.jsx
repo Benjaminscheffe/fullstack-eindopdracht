@@ -33,6 +33,9 @@ function UserPage() {
                                 <li className="asideLink" id="myBeatsLink" onClick={(() => toggleAsideContent('myBeats'))}>
                                     Beats
                                 </li>
+                                <li className="asideLink" id="myOrdersLink" onClick={(() => toggleAsideContent('myOrders'))}>
+                                    Orders
+                                </li>
                             </ul>
                         </aside>
                         <div className="flex-70">
@@ -67,8 +70,10 @@ function UserPage() {
                                         Edit <i className="fa-solid fa-gear"></i>
                                     </button>
                                 </BeatBlock>
-                                <hr></hr>
-                                <h2>Bought Beats</h2>
+                            </div>
+
+                            <div className="aside-content-block hide" id="myOrders">
+                                <h2>My Orders</h2>
                                 <BeatBlock title="title 1" artist="artist 1" bpm="90">
                                     <button className="btn btn-small btn-border btnReset">
                                         Download <i className="fa-solid fa-download"></i>
