@@ -1,8 +1,38 @@
 import './ProductsOverview.scss';
+import {useEffect, useState} from 'react';
+import axios from 'axios';
 import BeatBlock from "../../components/beatBlock/BeatBlock.jsx";
 import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
 
-function productsOverview() {
+
+function ProductsOverview() {
+    const [beats, setBeats] = useState([]);
+    const [loading, toggleLoading] = useState(false);
+    const [error, toggleError] = useState(false);
+
+    useEffect(() => {
+        async function fetchData() {
+            toggleLoading(true);
+            toggleError(false);
+
+            try {
+                const response = await axios.get('');
+
+                console.log(response.data);
+
+                setBeats(response.data);
+            } catch (e) {
+                console.error(e);
+
+                toggleError(true);
+            } finally {
+                toggleLoading(false);
+            }
+        }
+
+        fetchData();
+    })
+
     return (
         <main>
             <section className="main-content-block">
@@ -13,21 +43,17 @@ function productsOverview() {
             </section>
             <section className="main-content-block no-padding-top">
                 <div className="container small-container">
-                    <label>
-                        Sort by style:
-                        <select>
-                            <option selected>raw</option>
-                            <option>north-style</option>
-                            <option>south-style</option>
-                        </select>
-                    </label> <br />
 
                     <div className="beats-container">
+
                         <BeatBlock title="title 1" artist="artist 1" bpm="90" price="9,95" image="src/assets/images/ghettoblaster.jpg">
 
 
                             <ButtonComponent classNames="btn-small btn-border btnReset" buttonText="Go to the beat" noteIcon={true}  />
                         </BeatBlock>
+
+                        {loading && <p>Loading....</p>}
+                        {beats.length === 0 && error && <p>Er ging iets mis bij het ophalen van de data...</p>}
                     </div>
                 </div>
             </section>
@@ -35,4 +61,4 @@ function productsOverview() {
     );
 }
 
-export default productsOverview;
+export default ProductsOverview;
