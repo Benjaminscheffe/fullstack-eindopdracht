@@ -262,6 +262,7 @@ main {
 
 h1 {
   font-size: 3.5rem;
+  margin-bottom: 0.5em;
 }
 
 h2 {
@@ -299,6 +300,10 @@ a:hover {
 
 .font-weight-500 {
   font-weight: 500;
+}
+
+img {
+  width: 100%;
 }
 
 
@@ -392,6 +397,9 @@ a:hover {
 
 /* Forms */
 
+form {
+  margin-bottom: 2rem;
+}
 label {
   display: block;
   line-height: 1.8;
@@ -408,7 +416,6 @@ input {
 
 .form-block {
   border-bottom: 1px solid #000;
-  padding-bottom: 2rem;
   margin-bottom: 2rem;
 }
 
@@ -419,6 +426,27 @@ input {
   color: #FF0000;
 }
 
+
+/* Popup */
+
+.popup-overlay {
+  background: #000000d4;
+}
+
+.popup-content {
+  background: #FFF;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+.close {
+  cursor: pointer;
+  position: absolute;
+  right: 36px;
+  top: 32px;
+  font-size: 1.5rem;
+}
 
 
 /* footer */
