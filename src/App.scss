@@ -397,6 +397,9 @@ img {
 
 /* Forms */
 
+form {
+  margin-bottom: 2rem;
+}
 label {
   display: block;
   line-height: 1.8;
@@ -413,7 +416,6 @@ input {
 
 .form-block {
   border-bottom: 1px solid #000;
-  padding-bottom: 2rem;
   margin-bottom: 2rem;
 }
 

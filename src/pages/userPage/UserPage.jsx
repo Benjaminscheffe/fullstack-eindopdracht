@@ -3,14 +3,33 @@ import BeatBlock from "../../components/beatBlock/BeatBlock.jsx";
 import Popup from "reactjs-popup";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useForm} from "react-hook-form";
+import { useState} from 'react';
 import newyork from "../../assets/images/newyork-panorama.jpg"
+import axios from "axios";
 
 
 function UserPage() {
+    const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
 
-    function handleFormSubmit(data) {
+    async function handleFormSubmit(data) {
         console.log(data);
+         toggleError(false);
+
+         try {
+             const response = await axios.post("http://localhost:8080/users", data, {
+                 headers: {
+                     'Content-Type': 'application/json',
+                 }
+             })
+
+             console.log(response);
+         } catch (e) {
+             console.error(e);
+
+             toggleError(true);
+         }
+
     }
 
     function toggleAsideContent(id) {
@@ -187,8 +206,9 @@ function UserPage() {
                                                         register={register}
                                                         errors={errors}
                                                     />
-                                                    <button type="submit" className="btn btn-small">Register</button>
+                                                    <button type="submit" className="btn btn-small">Add</button>
                                                 </form>
+                                                {error && <p>Something went wrong, please try again.</p>}
                                             </div>
                                             <img src={newyork} alt="New York Panorama" />
 
