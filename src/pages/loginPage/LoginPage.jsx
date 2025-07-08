@@ -1,12 +1,19 @@
 import './LoginPage.scss';
 import VisualTextBlock from "../../components/visualTextBlock/VisualTextBlock.jsx";
 import {Link} from "react-router-dom";
-
+import {useEffect, useState} from "react";
+import axios from "axios";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useForm} from "react-hook-form";
 
 function LoginPage() {
+    const [user, setUser] = useState({});
+    const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
+
+    async function getUser() {
+
+    }
 
     function handleFormSubmit(data) {
         console.log(data);

@@ -2,12 +2,31 @@ import './RegisterPage.scss';
 import VisualTextBlock from "../../components/visualTextBlock/VisualTextBlock.jsx";
 import { useForm } from "react-hook-form";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 function RegisterPage() {
+    const [user, setUser] = useState({});
+    const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
 
-    function handleFormSubmit(data) {
-        console.log(data);
+    async function handleFormSubmit(data) {
+        toggleError(false);
+
+        try {
+            const response = await axios.post("http://localhost:8080/users",
+                data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+
+            console.log(response.data);
+        } catch (e) {
+            console.error(e);
+            toggleError(true);
+        }
     }
 
     return (
