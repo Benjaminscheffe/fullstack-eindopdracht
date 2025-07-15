@@ -16,11 +16,13 @@ function ProductsOverview() {
             toggleError(false);
 
             try {
-                const response = await axios.get('');
+                const response = await axios.get('http://localhost:8080/beats');
 
                 console.log(response.data);
 
                 setBeats(response.data);
+
+                toggleLoading(false);
             } catch (e) {
                 console.error(e);
 
@@ -31,7 +33,7 @@ function ProductsOverview() {
         }
 
         fetchData();
-    })
+    }, [])
 
     return (
         <main>
@@ -45,12 +47,11 @@ function ProductsOverview() {
                 <div className="container small-container">
 
                     <div className="beats-container">
-
-                        <BeatBlock title="title 1" artist="artist 1" bpm="90" price="9,95" image="src/assets/images/ghettoblaster.jpg">
-
-
-                            <ButtonComponent classNames="btn-small btn-border btnReset" buttonText="Go to the beat" noteIcon={true}  />
-                        </BeatBlock>
+                        { beats.length > 0 ? beats.map((beat) =>
+                            <BeatBlock title={beat.title} artist={beat.userId} bpm={beat.bpm} price={beat.price} image={beat.imageId}>
+                                <ButtonComponent classNames="btn-small btn-border btnReset" buttonText="Go to the beat" noteIcon={true} buttonFunction={() => location.href=`/beats/${beat.id}`}  />
+                            </BeatBlock>
+                        ) : <p>Geen beats beschikbaar op dit moment</p>}
 
                         {loading && <p>Loading....</p>}
                         {beats.length === 0 && error && <p>Er ging iets mis bij het ophalen van de data...</p>}
