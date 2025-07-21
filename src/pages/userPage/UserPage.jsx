@@ -16,47 +16,48 @@ function UserPage() {
     const { register, handleSubmit, formState: {errors} } = useForm();
 
     useEffect(() => {
-        async function fetchUser() {
-            toggleLoading(true);
-            toggleError(false);
-
-            try {
-                const response = await axios.get(`http://localhost:8080/users/${id}`, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                console.log(response.data);
-
-                setUser(response.data);
-            } catch (e) {
-                console.error(e);
-
-                toggleError(true);
-            } finally {
-                toggleLoading(false);
-            }
-        }
-
         fetchUser();
     }, []);
 
-    async function handleFormSubmit(data) {
-        console.log(data);
+    async function fetchUser() {
+        toggleLoading(true);
         toggleError(false);
 
         try {
-            const response = await axios.post(`http://localhost:8080/users/`, data, {
+            const response = await axios.get(`http://localhost:8080/users/${id}`, {
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 }
-            })
+            });
+            console.log(response.data);
+
+            setUser(response.data);
+        } catch (e) {
+            console.error(e);
+
+            toggleError(true);
+        } finally {
+            toggleLoading(false);
+        }
+    }
+
+    async function handleFormSubmit(data) {
+        toggleError(false);
+
+        data.userId = user.id;
+
+        console.log(data);
+
+        try {
+            const response = await axios.post(`http://localhost:8080/beats`, data);
 
             console.log(response);
         } catch (e) {
             console.error(e);
 
             toggleError(true);
+        } finally {
+            fetchUser();
         }
     }
 
@@ -136,7 +137,7 @@ function UserPage() {
                                 { Object.keys(user).length > 0 &&
 
                                     user.beats.length > 0 ? user.beats.map((beat) =>
-                                    <BeatBlock title={beat.title} artist="artist 1" bpm={user.bpm} price={user.price}>
+                                    <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}>
                                         <button className="btn btn-small btn-border btnReset">
                                             Edit <i className="fa-solid fa-gear"></i>
                                         </button>
@@ -266,7 +267,7 @@ function UserPage() {
                                 { Object.keys(user).length > 0 &&
                                 user.orderList.length > 0 ? user.orderList.map((order) =>
 
-                                    <BeatBlock title={order.beat.title} artist="artist 1" bpm={order.beat.bpm} price={order.beat.price}>
+                                    <BeatBlock title={order.beat.title} artist="artist 1" bpm={order.beat.bpm}>
                                         <button className="btn btn-small btn-border btnReset">
                                             Download <i className="fa-solid fa-download"></i>
                                         </button>
