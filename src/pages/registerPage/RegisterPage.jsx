@@ -2,11 +2,10 @@ import './RegisterPage.scss';
 import VisualTextBlock from "../../components/visualTextBlock/VisualTextBlock.jsx";
 import { useForm } from "react-hook-form";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import axios from "axios";
 
 function RegisterPage() {
-    const [user, setUser] = useState({});
     const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
 
@@ -21,7 +20,7 @@ function RegisterPage() {
                         'Content-Type': 'application/json',
                     }
                 })
-
+            console.log(response);
             console.log(response.data);
         } catch (e) {
             console.error(e);
@@ -38,8 +37,8 @@ function RegisterPage() {
                         <form onSubmit={handleSubmit(handleFormSubmit)}>
                             <InputComponent
                                 inputType="text"
-                                inputName="name"
-                                inputId="name-field"
+                                inputName="username"
+                                inputId="username-field"
                                 inputLabel="Username"
                                 validationRules={{
                                     required:  {
@@ -101,6 +100,7 @@ function RegisterPage() {
                             <button type="submit" className="btn btn-small">Register</button>
                         </form>
                     </div>
+                    { error && <p>Something went wrong!!</p>}
                 </VisualTextBlock>
             </section>
         </main>

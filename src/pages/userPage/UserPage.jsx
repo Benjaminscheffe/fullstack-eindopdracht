@@ -3,34 +3,66 @@ import BeatBlock from "../../components/beatBlock/BeatBlock.jsx";
 import Popup from "reactjs-popup";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useForm} from "react-hook-form";
-import { useState} from 'react';
+import {useEffect, useState} from 'react';
 import newyork from "../../assets/images/newyork-panorama.jpg"
 import axios from "axios";
+import {useParams} from "react-router-dom";
 
 
 function UserPage() {
     const [error, toggleError] = useState(false);
+    const [loading, toggleLoading] = useState(false);
+    const [user, setUser] = useState({});
     const { register, handleSubmit, formState: {errors} } = useForm();
 
-    async function handleFormSubmit(data) {
-        console.log(data);
-         toggleError(false);
+    useEffect(() => {
+        fetchUser();
+    }, []);
 
-         try {
-             const response = await axios.post("http://localhost:8080/users", data, {
-                 headers: {
-                     'Content-Type': 'application/json',
-                 }
-             })
+    async function fetchUser() {
+        toggleLoading(true);
+        toggleError(false);
 
-             console.log(response);
-         } catch (e) {
-             console.error(e);
+        try {
+            const response = await axios.get(`http://localhost:8080/users/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            console.log(response.data);
 
-             toggleError(true);
-         }
+            setUser(response.data);
+        } catch (e) {
+            console.error(e);
 
+            toggleError(true);
+        } finally {
+            toggleLoading(false);
+        }
     }
+
+    async function handleFormSubmit(data) {
+        toggleError(false);
+
+        data.userId = user.id;
+
+        console.log(data);
+
+        try {
+            const response = await axios.post(`http://localhost:8080/beats`, data);
+
+            console.log(response);
+        } catch (e) {
+            console.error(e);
+
+            toggleError(true);
+        } finally {
+            fetchUser();
+        }
+    }
+
+    const {id} = useParams();
+
 
     function toggleAsideContent(id) {
         const contents = document.querySelectorAll('.aside-content-block');
@@ -69,38 +101,49 @@ function UserPage() {
                         </aside>
                         <div className="flex-70">
                             <div className="aside-content-block" id="myProfile">
-                                <h2>My Profile</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
-                                <ul>
-                                    <li className="flexBox justify-content-flex-start">
-                                        <div className="flex-40 font-weight-500">Email</div>
-                                        <div className="flex-60">emailaddress@hotmail.com</div>
-                                    </li>
-                                    <li className="flexBox justify-content-flex-start">
-                                        <div className="flex-40 font-weight-500">Username</div>
-                                        <div className="flex-60">Eminem</div>
-                                    </li>
-                                    <li className="flexBox justify-content-flex-start">
-                                        <div className="flex-40 font-weight-500">Firstname</div>
-                                        <div className="flex-60">Slim</div>
-                                    </li>
-                                    <li className="flexBox justify-content-flex-start">
-                                        <div className="flex-40 font-weight-500">Password</div>
-                                        <div className="flex-60">BluePills</div>
-                                    </li>
+                                { Object.keys(user).length > 0 ?
+                                    <>
+                                        <h2>Welcome {user.username}</h2>
+                                        <p>Long time no see, it's cooking time. Dream big and make those hits!!</p>
+                                        <ul>
+                                            <li className="flexBox justify-content-flex-start">
+                                                <div className="flex-40 font-weight-500">Email</div>
+                                                <div className="flex-60">{user.email}</div>
+                                            </li>
+                                            <li className="flexBox justify-content-flex-start">
+                                                <div className="flex-40 font-weight-500">Username</div>
+                                                <div className="flex-60">{user.username}</div>
+                                            </li>
+                                            <li className="flexBox justify-content-flex-start">
+                                                <div className="flex-40 font-weight-500">Firstname</div>
+                                                <div className="flex-60">Slim</div>
+                                            </li>
+                                            <li className="flexBox justify-content-flex-start">
+                                                <div className="flex-40 font-weight-500">Password</div>
+                                                <div className="flex-60">{user.password
+                                                }</div>
+                                            </li>
 
-                                </ul>
+                                        </ul>
+                                    </> : <p>User details not available</p>
+                                }
+
                             </div>
 
                             <div className="aside-content-block hide" id="myBeats">
                                 <h2>My Beats</h2>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
 
-                                <BeatBlock title="title 1" artist="artist 1" bpm="90">
-                                    <button className="btn btn-small btn-border btnReset">
-                                        Edit <i className="fa-solid fa-gear"></i>
-                                    </button>
-                                </BeatBlock>
+                                { Object.keys(user).length > 0 &&
+
+                                    user.beats.length > 0 ? user.beats.map((beat) =>
+                                    <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}>
+                                        <button className="btn btn-small btn-border btnReset">
+                                            Edit <i className="fa-solid fa-gear"></i>
+                                        </button>
+                                    </BeatBlock>
+                                ) : <p>No beats</p>
+                                }
 
                                 <Popup trigger={<button className="btn btn-small">Add a beat <i className="fa-solid fa-music"></i></button>} modal>
                                     {close => (
@@ -178,34 +221,34 @@ function UserPage() {
                                                         register={register}
                                                         errors={errors}
                                                     />
-                                                    <InputComponent
-                                                        inputType="file"
-                                                        inputName="file"
-                                                        inputId="file-field"
-                                                        inputLabel="Music File"
-                                                        validationRules={{
-                                                            required:  {
-                                                                value: true,
-                                                                message: 'This field is required'
-                                                            },
-                                                        }}
-                                                        register={register}
-                                                        errors={errors}
-                                                    />
-                                                    <InputComponent
-                                                        inputType="file"
-                                                        inputName="image"
-                                                        inputId="image-field"
-                                                        inputLabel="Image"
-                                                        validationRules={{
-                                                            required:  {
-                                                                value: true,
-                                                                message: 'This field is required'
-                                                            },
-                                                        }}
-                                                        register={register}
-                                                        errors={errors}
-                                                    />
+                                                    {/*<InputComponent*/}
+                                                    {/*    inputType="file"*/}
+                                                    {/*    inputName="file"*/}
+                                                    {/*    inputId="file-field"*/}
+                                                    {/*    inputLabel="Music File"*/}
+                                                    {/*    // validationRules={{*/}
+                                                    {/*    //     required:  {*/}
+                                                    {/*    //         value: true,*/}
+                                                    {/*    //         message: 'This field is required'*/}
+                                                    {/*    //     },*/}
+                                                    {/*    // }}*/}
+                                                    {/*    register={register}*/}
+                                                    {/*    errors={errors}*/}
+                                                    {/*/>*/}
+                                                    {/*<InputComponent*/}
+                                                    {/*    inputType="file"*/}
+                                                    {/*    inputName="image"*/}
+                                                    {/*    inputId="image-field"*/}
+                                                    {/*    inputLabel="Image"*/}
+                                                    {/*    // validationRules={{*/}
+                                                    {/*    //     required:  {*/}
+                                                    {/*    //         value: true,*/}
+                                                    {/*    //         message: 'This field is required'*/}
+                                                    {/*    //     },*/}
+                                                    {/*    // }}*/}
+                                                    {/*    register={register}*/}
+                                                    {/*    errors={errors}*/}
+                                                    {/*/>*/}
                                                     <button type="submit" className="btn btn-small">Add</button>
                                                 </form>
                                                 {error && <p>Something went wrong, please try again.</p>}
@@ -220,11 +263,17 @@ function UserPage() {
 
                             <div className="aside-content-block hide" id="myOrders">
                                 <h2>My Orders</h2>
-                                <BeatBlock title="title 1" artist="artist 1" bpm="90">
-                                    <button className="btn btn-small btn-border btnReset">
-                                        Download <i className="fa-solid fa-download"></i>
-                                    </button>
-                                </BeatBlock>
+
+                                { Object.keys(user).length > 0 &&
+                                user.orderList.length > 0 ? user.orderList.map((order) =>
+
+                                    <BeatBlock title={order.beat.title} artist="artist 1" bpm={order.beat.bpm}>
+                                        <button className="btn btn-small btn-border btnReset">
+                                            Download <i className="fa-solid fa-download"></i>
+                                        </button>
+                                    </BeatBlock>
+                                ) : <p>No beats</p>
+                                }
                             </div>
 
                         </div>

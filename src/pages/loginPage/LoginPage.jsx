@@ -11,12 +11,23 @@ function LoginPage() {
     const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
 
-    async function getUser() {
-
-    }
-
-    function handleFormSubmit(data) {
+    async function handleFormSubmit(data) {
         console.log(data);
+        toggleError(false);
+
+        try {
+            const response = await axios.post(`http://localhost:8080/users/`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+
+            console.log(response);
+        } catch (e) {
+            console.error(e);
+
+            toggleError(true);
+        }
     }
     return (
         <main>
