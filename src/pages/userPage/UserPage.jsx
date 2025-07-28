@@ -10,6 +10,8 @@ import {useParams} from "react-router-dom";
 
 
 function UserPage() {
+    const [file, setFile] = useState([]);
+    const [image, setImage] = useState([]);
     const [error, toggleError] = useState(false);
     const [loading, toggleLoading] = useState(false);
     const [user, setUser] = useState({});
@@ -18,6 +20,18 @@ function UserPage() {
     useEffect(() => {
         fetchUser();
     }, []);
+
+    function handleFileChange(e) {
+        const uploadedFile = e.target.files[0];
+        console.log(uploadedFile);
+        setFile(uploadedFile);
+    }
+
+    function handleImageChange(e) {
+        const uploadedImageFile = e.target.files[0];
+        console.log(uploadedImageFile);
+        setImage(uploadedImageFile);
+    }
 
     async function fetchUser() {
         toggleLoading(true);
@@ -46,12 +60,32 @@ function UserPage() {
 
         data.userId = user.id;
 
-        console.log(data);
+        const formFile = new FormData();
+        formFile.append("file", file);
+
+        const formImage = new FormData();
+        formImage.append("file", image);
 
         try {
-            const response = await axios.post(`http://localhost:8080/beats`, data);
+            const responseData = await axios.post(`http://localhost:8080/beats`, data);
 
-            console.log(response);
+            console.log(responseData.data.id);
+
+            const responseFile = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/file`, formFile, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+
+            const responseImage = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/image`, formImage, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                }
+            });
+
+            console.log(responseFile.data);
+
+            console.log(responseImage.data);
         } catch (e) {
             console.error(e);
 
@@ -221,34 +255,36 @@ function UserPage() {
                                                         register={register}
                                                         errors={errors}
                                                     />
-                                                    {/*<InputComponent*/}
-                                                    {/*    inputType="file"*/}
-                                                    {/*    inputName="file"*/}
-                                                    {/*    inputId="file-field"*/}
-                                                    {/*    inputLabel="Music File"*/}
-                                                    {/*    // validationRules={{*/}
-                                                    {/*    //     required:  {*/}
-                                                    {/*    //         value: true,*/}
-                                                    {/*    //         message: 'This field is required'*/}
-                                                    {/*    //     },*/}
-                                                    {/*    // }}*/}
-                                                    {/*    register={register}*/}
-                                                    {/*    errors={errors}*/}
-                                                    {/*/>*/}
-                                                    {/*<InputComponent*/}
-                                                    {/*    inputType="file"*/}
-                                                    {/*    inputName="image"*/}
-                                                    {/*    inputId="image-field"*/}
-                                                    {/*    inputLabel="Image"*/}
-                                                    {/*    // validationRules={{*/}
-                                                    {/*    //     required:  {*/}
-                                                    {/*    //         value: true,*/}
-                                                    {/*    //         message: 'This field is required'*/}
-                                                    {/*    //     },*/}
-                                                    {/*    // }}*/}
-                                                    {/*    register={register}*/}
-                                                    {/*    errors={errors}*/}
-                                                    {/*/>*/}
+                                                    <InputComponent
+                                                        inputType="file"
+                                                        inputName="file"
+                                                        inputId="file-field"
+                                                        inputLabel="Music File"
+                                                        validationRules={{
+                                                            required:  {
+                                                                value: true,
+                                                                message: 'This field is required'
+                                                            },
+                                                        }}
+                                                        register={register}
+                                                        errors={errors}
+                                                        onChange={handleFileChange}
+                                                    />
+                                                    <InputComponent
+                                                        inputType="file"
+                                                        inputName="image"
+                                                        inputId="image-field"
+                                                        inputLabel="Image"
+                                                        validationRules={{
+                                                            required:  {
+                                                                value: true,
+                                                                message: 'This field is required'
+                                                            },
+                                                        }}
+                                                        register={register}
+                                                        errors={errors}
+                                                        onChange={handleImageChange}
+                                                    />
                                                     <button type="submit" className="btn btn-small">Add</button>
                                                 </form>
                                                 {error && <p>Something went wrong, please try again.</p>}
