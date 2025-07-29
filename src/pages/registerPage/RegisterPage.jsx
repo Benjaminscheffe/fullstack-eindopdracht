@@ -2,12 +2,30 @@ import './RegisterPage.scss';
 import VisualTextBlock from "../../components/visualTextBlock/VisualTextBlock.jsx";
 import { useForm } from "react-hook-form";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
+import {useState} from "react";
+import axios from "axios";
 
 function RegisterPage() {
+    const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
 
-    function handleFormSubmit(data) {
-        console.log(data);
+    async function handleFormSubmit(data) {
+        toggleError(false);
+
+        try {
+            const response = await axios.post("http://localhost:8080/users",
+                data,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+            console.log(response);
+            console.log(response.data);
+        } catch (e) {
+            console.error(e);
+            toggleError(true);
+        }
     }
 
     return (
@@ -19,8 +37,8 @@ function RegisterPage() {
                         <form onSubmit={handleSubmit(handleFormSubmit)}>
                             <InputComponent
                                 inputType="text"
-                                inputName="name"
-                                inputId="name-field"
+                                inputName="username"
+                                inputId="username-field"
                                 inputLabel="Username"
                                 validationRules={{
                                     required:  {
@@ -82,6 +100,7 @@ function RegisterPage() {
                             <button type="submit" className="btn btn-small">Register</button>
                         </form>
                     </div>
+                    { error && <p>Something went wrong!!</p>}
                 </VisualTextBlock>
             </section>
         </main>
