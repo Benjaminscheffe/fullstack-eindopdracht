@@ -54,6 +54,12 @@ function ProductDetail() {
                                             <li>{beat.bpm}</li>
                                             <li>{beat.price}</li>
                                         </ul>
+                                        <audio controls>
+                                            <source src={`http://localhost:8080/beats/${beat.id}/file`}
+                                                    type="audio/mpeg">
+                                            </source>
+                                            The browser doesn't support this audio!
+                                        </audio>
                                         <button className="btn btn">
                                             BUY
                                             <i className="fa-solid fa-cart-shopping"></i>

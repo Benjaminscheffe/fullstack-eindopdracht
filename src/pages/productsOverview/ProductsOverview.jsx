@@ -48,7 +48,7 @@ function ProductsOverview() {
 
                     <div className="beats-container">
                         { beats.length > 0 ? beats.map((beat) =>
-                            <BeatBlock title={beat.title} artist={beat.userId} bpm={beat.bpm} price={beat.price} image={beat.imageId}>
+                            <BeatBlock title={beat.title} artist={beat.userId} bpm={beat.bpm} price={beat.price} image={`http://localhost:8080/beats/${beat.id}/image`}>
                                 <ButtonComponent classNames="btn-small btn-border btnReset" buttonText="Go to the beat" noteIcon={true} buttonFunction={() => location.href=`/beats/${beat.id}`}  />
                             </BeatBlock>
                         ) : <p>Geen beats beschikbaar op dit moment</p>}
