@@ -44,34 +44,51 @@ function ProductDetail() {
             <section className="main-content-block">
                 <div className="container small-container ">
                     <div className="detail-page justify-content-flex-start flexBox align-items-top gap-2 w-100">
-                            <div className="detail-page-image"></div>
-                            <div className="detail-page-info">
-                                { Object.keys(beat).length > 0 ?
-                                    <>
-                                        <h4>{beat.title}</h4>
-                                        <h5>{beat.userId}</h5>
-                                        <ul>
-                                            <li>{beat.bpm}</li>
-                                            <li>{beat.price}</li>
-                                        </ul>
-                                        <audio controls>
-                                            <source src={`http://localhost:8080/beats/${beat.id}/file`}
-                                                    type="audio/mpeg">
-                                            </source>
-                                            The browser doesn't support this audio!
-                                        </audio>
-                                        <button className="btn btn">
-                                            BUY
-                                            <i className="fa-solid fa-cart-shopping"></i>
-                                        </button>
-                                    </> : <p>Deze beat is niet beschikbaar</p>
-                                }
+                        <div className="detail-page-image"></div>
+                        <div className="detail-page-info">
+                            { Object.keys(beat).length > 0 ?
+                                <>
+                                    <h4>Title: {beat.title}</h4>
+                                    <h5>{beat.userId}</h5>
+                                    <ul>
+                                        <li>{beat.bpm}</li>
+                                        <li>{beat.price}</li>
+                                    </ul>
+                                    <audio controls controlsList="nodownload">
+                                        <source src={`http://localhost:8080/beats/${beat.id}/file`}
+                                                type="audio/mpeg">
+                                        </source>
+                                        The browser doesn't support this audio!
+                                    </audio>
 
-                                {loading && <p>Loading....</p>}
-                                {beat.length === 0 && error && <p>Er ging iets mis bij het ophalen van de data...</p>}
+                                    <a href={`http://localhost:8080/beats/${beat.id}/file`} download={`http://localhost:8080/beats/${beat.id}/file`}>Download</a>
+                                    <button className="btn btn">
+                                        BUY
+                                        <i className="fa-solid fa-cart-shopping"></i>
+                                    </button>
+
+                                    </> : <p>Deze beat is niet beschikbaar</p>
+                            }
+
+                            {loading && <p>Loading....</p>}
+                            {beat.length === 0 && error && <p>Er ging iets mis bij het ophalen van de data...</p>}
                             </div>
                         </div>
+                        <h3>Reviews</h3>
+
+                        <ul>
+                            { Object.keys(beat).length > 0 &&
+                            beat.reviews.length > 0 ? beat.reviews.map((review) =>
+
+                                    <li>{ review.username } - score: { review.score } <br/> "{ review.comment }"</li>
+                                ) :
+                                <li>No reviews yet</li>
+                            }
+                        </ul>
                     </div>
+
+
+
 
             </section>
         </main>
