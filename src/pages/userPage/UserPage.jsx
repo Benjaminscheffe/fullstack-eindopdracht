@@ -7,6 +7,7 @@ import {useEffect, useState} from 'react';
 import newyork from "../../assets/images/newyork-panorama.jpg"
 import axios from "axios";
 import {useParams} from "react-router-dom";
+import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
 
 
 function UserPage() {
@@ -304,9 +305,8 @@ function UserPage() {
                                 user.orderList.length > 0 ? user.orderList.map((order) =>
 
                                     <BeatBlock title={order.beat.title} artist="artist 1" bpm={order.beat.bpm}>
-                                        <button className="btn btn-small btn-border btnReset">
-                                            Download <i className="fa-solid fa-download"></i>
-                                        </button>
+                                        <ButtonComponent classNames="btn btn-small btn-border btnReset" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=
+                                            `http://localhost:8080/beats/${order.beat.id}/file`} />
                                     </BeatBlock>
                                 ) : <p>No beats</p>
                                 }
