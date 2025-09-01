@@ -1,6 +1,7 @@
 import './Header.scss';
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {NavLink} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext.jsx";
 
 function Header() {
 
@@ -8,6 +9,10 @@ function Header() {
     const ToggleClass = () => {
         setActive(!isActive);
     };
+
+    const { isAuth, logout } = useContext(AuthContext);
+
+
 
     return (
         <header>

@@ -8,9 +8,12 @@ import LoginPage from "./pages/loginPage/LoginPage.jsx";
 import RegisterPage from "./pages/registerPage/RegisterPage.jsx";
 import NotFoundPage from "./pages/notFoundPage/NotFoundPage.jsx";
 import UserPage from "./pages/userPage/UserPage.jsx";
+import {AuthContext} from "./context/AuthContext.jsx";
+import {useContext} from "react";
+import {Navigate} from "react-router";
 
 function App() {
-
+    const { isAuth } = useContext(AuthContext);
 
   return (
     <>
@@ -24,7 +27,7 @@ function App() {
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/register" element={<RegisterPage/>} />
                 <Route path="*" element={<NotFoundPage/>} />
-                <Route path="/user/:id" element={<UserPage/>} />
+                <Route path="/user/:id" element={ isAuth? <UserPage/> : <Navigate to='/login' /> } />
                 <Route path="/beats/:id" element={<ProductDetail/>} />
             </Routes>
 

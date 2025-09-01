@@ -6,8 +6,9 @@ import {useForm} from "react-hook-form";
 import {useEffect, useState} from 'react';
 import newyork from "../../assets/images/newyork-panorama.jpg"
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
+import {Navigate} from "react-router";
 
 
 function UserPage() {
@@ -16,6 +17,7 @@ function UserPage() {
     const [error, toggleError] = useState(false);
     const [loading, toggleLoading] = useState(false);
     const [user, setUser] = useState({});
+    const navigate = useNavigate();
     const { register, handleSubmit, formState: {errors} } = useForm();
 
     useEffect(() => {
@@ -41,7 +43,8 @@ function UserPage() {
         try {
             const response = await axios.get(`http://localhost:8080/users/${id}`, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
             console.log(response.data);
@@ -51,6 +54,8 @@ function UserPage() {
             console.error(e);
 
             toggleError(true);
+
+            navigate('/notfound');
         } finally {
             toggleLoading(false);
         }
@@ -301,15 +306,20 @@ function UserPage() {
                             <div className="aside-content-block hide" id="myOrders">
                                 <h2>My Orders</h2>
 
-                                { Object.keys(user).length > 0 &&
-                                user.orderList.length > 0 ? user.orderList.map((order) =>
+                                <ul>
+                                    { Object.keys(user).length > 0 &&
+                                    user.orderList.length > 0 ? user.orderList.map((order) =>
 
-                                    <BeatBlock title={order.beat.title} artist="artist 1" bpm={order.beat.bpm}>
-                                        <ButtonComponent classNames="btn btn-small btn-border btnReset" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=
-                                            `http://localhost:8080/beats/${order.beat.id}/file`} />
-                                    </BeatBlock>
-                                ) : <p>No beats</p>
-                                }
+                                        <li>{ order.id } - { order.orderDate } -  <ButtonComponent classNames="btn btn-small btn-border btnReset" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=`http://localhost:8080/beats/${order.beatId}/file`} /></li>
+
+                                        // <BeatBlock title={order.beat.title} artist="artist 1" bpm={order.beat.bpm}>
+                                        //     <ButtonComponent classNames="btn btn-small btn-border btnReset" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=
+                                        //         `http://localhost:8080/beats/${order.beat.id}/file`} />
+                                        // </BeatBlock>
+                                        ) : <li>No beats</li>
+                                    }
+                                </ul>
+
                             </div>
 
                         </div>
