@@ -10,8 +10,10 @@ function Header() {
         setActive(!isActive);
     };
 
-    const { isAuth, logout } = useContext(AuthContext);
+    const { userId, isAuth, logout } = useContext(AuthContext);
 
+    //const userLink = `/user/${auth.user}`;
+    console.log(userId);
 
 
     return (
@@ -39,8 +41,15 @@ function Header() {
                 </nav>
 
                     <div className="flexBox gap-1">
-                        <NavLink className="btn btn-border" to="/login">login</NavLink>
-                        <NavLink to="/"><i className="fa-solid fa-user"></i></NavLink>
+                        { !isAuth ?
+                            <NavLink className="btn btn-border" to="/login">login</NavLink> :
+                            <>
+                                <button className="btn btn-border" onClick={logout}>Logout</button>
+                                <NavLink to={`/user/${userId}`}><i className="fa-solid fa-user"></i></NavLink>
+                            </>
+                        }
+
+
                     </div>
                 <div className={!isActive ? "menu open" : "menu"} >
                     <ul>

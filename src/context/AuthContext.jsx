@@ -15,6 +15,7 @@ function AuthContentProvider({ children }) {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('id');
 
         if(token) {
             const decoded = jwtDecode(token);
@@ -24,10 +25,7 @@ function AuthContentProvider({ children }) {
                 // Ja dan halen wev de userinfo op en zetten we hem in de state
                 setAuth({
                     isAuth: true,
-                    user: {
-                        email: decoded.email,
-                        roles: decoded.role,
-                    },
+                    user: userId,
                     status: 'done',
                 })
             } else {
@@ -46,23 +44,28 @@ function AuthContentProvider({ children }) {
 
     function login(userData) {
 
-        console.log(userData);
+        console.log(userData.id);
 
         localStorage.setItem('token', userData.jwt);
+        localStorage.setItem('id', userData.id)
+
+        const userId = localStorage.getItem('id');
 
         setAuth({
             isAuth: true,
-            user: {},
+            user: userId,
             status: 'done',
         });
 
         console.log(userData);
 
+        console.log(auth);
+
         navigate(`/user/${userData.id}`)
     }
 
     function logout() {
-        localStorage.removeItem('token');
+        localStorage.clear();
         setAuth({
             isAuth: false,
             user: null,
@@ -74,8 +77,9 @@ function AuthContentProvider({ children }) {
 
     const data = {
         isAuth: auth.isAuth,
-        login,
-        logout
+        userId: auth.user,
+        logout,
+        login
     }
 
     return (
