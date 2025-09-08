@@ -6,6 +6,7 @@ import ButtonComponent from "../../components/buttonComponent/ButtonComponent.js
 import ProfileTab from "./tabs/ProfileTab.jsx";
 import BeatsTab from "./tabs/BeatsTab.jsx";
 import OrderTabs from "./tabs/OrdersTab.jsx";
+import AdminTab from "./tabs/AdminTab.jsx";
 
 
 function UserPage() {
@@ -14,10 +15,11 @@ function UserPage() {
     const [user, setUser] = useState({});
     const navigate = useNavigate();
 
-
     useEffect(() => {
         fetchUser();
     }, []);
+
+    console.log(user);
 
     async function fetchUser() {
         toggleLoading(true);
@@ -62,7 +64,9 @@ function UserPage() {
         activeBlock.classList.remove('hide');
         activeLink.classList.add('active');
     }
-
+    if(loading){
+        return <p>Loading!</p>
+    }
     return (
         <main>
             <div className="container small-container">
@@ -80,6 +84,11 @@ function UserPage() {
                                 <li className="asideLink" id="myOrdersLink" onClick={(() => toggleAsideContent('myOrders'))}>
                                     Orders
                                 </li>
+                                {user?.roles?.some(r => r.rolename === "ROLE_ADMIN") &&
+                                    <li className="asideLink" id="myAdminLink" onClick={(() => toggleAsideContent('myAdmin'))}>
+                                        Admin
+                                    </li>
+                                }
                             </ul>
                         </aside>
                         <div className="flex-70">
@@ -92,7 +101,11 @@ function UserPage() {
                             </div>
 
                             <div className="aside-content-block hide" id="myOrders">
-                                <OrderTabs user={user} />
+                                <OrderTabs user={user} error={error} toggleError={toggleError} />
+                            </div>
+
+                            <div className="aside-content-block hide" id="myAdmin">
+                                <AdminTab />
                             </div>
 
                         </div>

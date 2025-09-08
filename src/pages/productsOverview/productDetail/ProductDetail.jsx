@@ -1,12 +1,18 @@
 import './ProductDetail.scss';
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
+import {AuthContext} from "../../../context/AuthContext.jsx";
+import {useNavigate} from "react-router-dom";
+import toast, {Toaster} from 'react-hot-toast';
 
 function ProductDetail() {
     const [beat, setBeat] = useState({});
     const [loading, toggleLoading] = useState(false);
     const [error, toggleError] = useState(false);
+    const {isAuth} = useContext(AuthContext);
+    const notifyLogin = () => toast('Login to buy beats!');
+    const notifyBought = () => toast('Beat successfully added to your profile!');
 
     useEffect(() => {
         async function fetchBeat() {
@@ -34,13 +40,85 @@ function ProductDetail() {
         fetchBeat();
     }, []);
 
+    async function placeOrder() {
+        if (!isAuth) {
+            notifyLogin();
+        } else {
+            toggleLoading(true);
+            toggleError(false);
+
+            let date = new Date().toISOString();
+            date = date.replace(/Z$/, '');
+
+            console.log(date);
+
+            const orderDate = { orderDate : date };
+
+            try {
+                const response = await axios.post('http://localhost:8080/orders', orderDate);
+
+                console.log(response.data);
+
+                await assignUser(response.data.id);
+
+                await assignBeat(response.data.id);
+
+            } catch (e) {
+                console.error(e);
+
+                toggleError(true);
+            } finally {
+                toggleLoading(false);
+
+                notifyBought();
+
+            }
+
+        }
+    }
+
+    async function assignBeat(id) {
+        toggleLoading(true);
+        toggleError(false);
+
+        try {
+            const response = await axios.put(`http://localhost:8080/orders/${id}/beat/${beat.id}`);
+            console.log(response.data);
+
+        } catch (e) {
+            console.error(e);
+
+            toggleError(true);
+        } finally {
+            toggleLoading(false);
+        }
+    }
+
+    async function assignUser(id) {
+        toggleLoading(true);
+        toggleError(false);
+
+        try {
+            const response = await axios.put(`http://localhost:8080/orders/${id}/user/${localStorage.getItem('id')}`);
+
+            console.log(response.data);
+
+        } catch (e) {
+            console.error(e);
+
+            toggleError(true);
+        } finally {
+            toggleLoading(false);
+        }
+    }
+
+
+
     const {id} = useParams();
-
-    console.log(id);
-
 
     return (
         <main>
+            <Toaster />
             <section className="main-content-block">
                 <div className="container small-container ">
                     <div className="detail-page justify-content-flex-start flexBox align-items-top gap-2 w-100">
@@ -60,9 +138,9 @@ function ProductDetail() {
                                         </source>
                                         The browser doesn't support this audio!
                                     </audio>
+                                    <br /><br />
 
-                                    <a href={`http://localhost:8080/beats/${beat.id}/file`} download={`http://localhost:8080/beats/${beat.id}/file`}>Download</a>
-                                    <button className="btn btn">
+                                    <button className="btn btn" onClick={placeOrder}>
                                         BUY
                                         <i className="fa-solid fa-cart-shopping"></i>
                                     </button>

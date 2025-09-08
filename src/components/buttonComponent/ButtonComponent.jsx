@@ -1,7 +1,6 @@
 import './ButtonComponent.scss';
 
 function ButtonComponent( {classNames, buttonText, noteIcon, downloadIcon, editIcon, reviewIcon, buttonFunction }) {
-    console.log(classNames);
     return (
         <button className={`btn ${classNames}`} onClick={buttonFunction}>
             { buttonText }

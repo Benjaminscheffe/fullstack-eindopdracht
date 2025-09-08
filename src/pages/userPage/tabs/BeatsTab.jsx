@@ -16,7 +16,6 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
     const ref = useRef();
     const closeTooltip = () => ref.current.close();
 
-
     async function handleFormSubmit(data) {
         toggleError(false);
 
