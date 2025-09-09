@@ -1,6 +1,7 @@
 import './Header.scss';
-import {useState} from "react";
+import {useContext, useState} from "react";
 import {NavLink} from "react-router-dom";
+import {AuthContext} from "../../context/AuthContext.jsx";
 
 function Header() {
 
@@ -8,6 +9,12 @@ function Header() {
     const ToggleClass = () => {
         setActive(!isActive);
     };
+
+    const { userId, isAuth, logout } = useContext(AuthContext);
+
+    //const userLink = `/user/${auth.user}`;
+    console.log(userId);
+
 
     return (
         <header>
@@ -34,8 +41,15 @@ function Header() {
                 </nav>
 
                     <div className="flexBox gap-1">
-                        <NavLink className="btn btn-border" to="/login">login</NavLink>
-                        <NavLink to="/"><i className="fa-solid fa-user"></i></NavLink>
+                        { !isAuth ?
+                            <NavLink className="btn btn-border" to="/login">login</NavLink> :
+                            <>
+                                <button className="btn btn-border" onClick={logout}>Logout</button>
+                                <NavLink to={`/user/${userId}`}><i className="fa-solid fa-user"></i></NavLink>
+                            </>
+                        }
+
+
                     </div>
                 <div className={!isActive ? "menu open" : "menu"} >
                     <ul>

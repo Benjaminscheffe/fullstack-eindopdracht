@@ -4,10 +4,12 @@ import { useForm } from "react-hook-form";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useState} from "react";
 import axios from "axios";
+import toast, {Toaster} from 'react-hot-toast';
 
 function RegisterPage() {
     const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
+    const notify = () => toast('Registered successfully!')
 
     async function handleFormSubmit(data) {
         toggleError(false);
@@ -25,6 +27,8 @@ function RegisterPage() {
         } catch (e) {
             console.error(e);
             toggleError(true);
+        } finally {
+            notify();
         }
     }
 
@@ -103,6 +107,7 @@ function RegisterPage() {
                     { error && <p>Something went wrong!!</p>}
                 </VisualTextBlock>
             </section>
+            <Toaster />
         </main>
     );
 }

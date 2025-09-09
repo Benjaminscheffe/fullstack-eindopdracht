@@ -1,38 +1,25 @@
 import './UserPage.scss';
-import BeatBlock from "../../components/beatBlock/BeatBlock.jsx";
-import Popup from "reactjs-popup";
-import InputComponent from "../../components/inputComponent/InputComponent.jsx";
-import {useForm} from "react-hook-form";
 import {useEffect, useState} from 'react';
-import newyork from "../../assets/images/newyork-panorama.jpg"
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
+import ProfileTab from "./tabs/ProfileTab.jsx";
+import BeatsTab from "./tabs/BeatsTab.jsx";
+import OrderTabs from "./tabs/OrdersTab.jsx";
+import AdminTab from "./tabs/AdminTab.jsx";
 
 
 function UserPage() {
-    const [file, setFile] = useState([]);
-    const [image, setImage] = useState([]);
     const [error, toggleError] = useState(false);
     const [loading, toggleLoading] = useState(false);
     const [user, setUser] = useState({});
-    const { register, handleSubmit, formState: {errors} } = useForm();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUser();
     }, []);
 
-    function handleFileChange(e) {
-        const uploadedFile = e.target.files[0];
-        console.log(uploadedFile);
-        setFile(uploadedFile);
-    }
-
-    function handleImageChange(e) {
-        const uploadedImageFile = e.target.files[0];
-        console.log(uploadedImageFile);
-        setImage(uploadedImageFile);
-    }
+    console.log(user);
 
     async function fetchUser() {
         toggleLoading(true);
@@ -41,7 +28,8 @@ function UserPage() {
         try {
             const response = await axios.get(`http://localhost:8080/users/${id}`, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
             console.log(response.data);
@@ -51,48 +39,10 @@ function UserPage() {
             console.error(e);
 
             toggleError(true);
+
+            navigate('/notfound');
         } finally {
             toggleLoading(false);
-        }
-    }
-
-    async function handleFormSubmit(data) {
-        toggleError(false);
-
-        data.userId = user.id;
-
-        const formFile = new FormData();
-        formFile.append("file", file);
-
-        const formImage = new FormData();
-        formImage.append("file", image);
-
-        try {
-            const responseData = await axios.post(`http://localhost:8080/beats`, data);
-
-            console.log(responseData.data.id);
-
-            const responseFile = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/file`, formFile, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-
-            const responseImage = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/image`, formImage, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-
-            console.log(responseFile.data);
-
-            console.log(responseImage.data);
-        } catch (e) {
-            console.error(e);
-
-            toggleError(true);
-        } finally {
-            fetchUser();
         }
     }
 
@@ -114,7 +64,9 @@ function UserPage() {
         activeBlock.classList.remove('hide');
         activeLink.classList.add('active');
     }
-
+    if(loading){
+        return <p>Loading!</p>
+    }
     return (
         <main>
             <div className="container small-container">
@@ -132,184 +84,28 @@ function UserPage() {
                                 <li className="asideLink" id="myOrdersLink" onClick={(() => toggleAsideContent('myOrders'))}>
                                     Orders
                                 </li>
+                                {user?.roles?.some(r => r.rolename === "ROLE_ADMIN") &&
+                                    <li className="asideLink" id="myAdminLink" onClick={(() => toggleAsideContent('myAdmin'))}>
+                                        Admin
+                                    </li>
+                                }
                             </ul>
                         </aside>
                         <div className="flex-70">
                             <div className="aside-content-block" id="myProfile">
-                                { Object.keys(user).length > 0 ?
-                                    <>
-                                        <h2>Welcome {user.username}</h2>
-                                        <p>Long time no see, it's cooking time. Dream big and make those hits!!</p>
-                                        <ul>
-                                            <li className="flexBox justify-content-flex-start">
-                                                <div className="flex-40 font-weight-500">Email</div>
-                                                <div className="flex-60">{user.email}</div>
-                                            </li>
-                                            <li className="flexBox justify-content-flex-start">
-                                                <div className="flex-40 font-weight-500">Username</div>
-                                                <div className="flex-60">{user.username}</div>
-                                            </li>
-                                            <li className="flexBox justify-content-flex-start">
-                                                <div className="flex-40 font-weight-500">Firstname</div>
-                                                <div className="flex-60">Slim</div>
-                                            </li>
-                                            <li className="flexBox justify-content-flex-start">
-                                                <div className="flex-40 font-weight-500">Password</div>
-                                                <div className="flex-60">{user.password
-                                                }</div>
-                                            </li>
-
-                                        </ul>
-                                    </> : <p>User details not available</p>
-                                }
-
+                                <ProfileTab user={user} />
                             </div>
 
                             <div className="aside-content-block hide" id="myBeats">
-                                <h2>My Beats</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                { Object.keys(user).length > 0 &&
-
-                                    user.beats.length > 0 ? user.beats.map((beat) =>
-                                    <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}>
-                                        <button className="btn btn-small btn-border btnReset">
-                                            Edit <i className="fa-solid fa-gear"></i>
-                                        </button>
-                                    </BeatBlock>
-                                ) : <p>No beats</p>
-                                }
-
-                                <Popup trigger={<button className="btn btn-small">Add a beat <i className="fa-solid fa-music"></i></button>} modal>
-                                    {close => (
-                                        <div className="popup">
-
-                                            <a className="close" onClick={close}>
-                                                <i className="fa-solid fa-xmark"></i>
-                                            </a>
-                                            <h3>Add a beat</h3>
-                                            <div className="form-block">
-                                                <form onSubmit={handleSubmit(handleFormSubmit)}>
-                                                    <InputComponent
-                                                        inputType="text"
-                                                        inputName="title"
-                                                        inputId="title-field"
-                                                        inputLabel="Title"
-                                                        validationRules={{
-                                                            required:  {
-                                                                value: true,
-                                                                message: 'This field is required'
-                                                            },
-                                                            minLength: {
-                                                                value: 3,
-                                                                message: 'Name must be at least 3 characters',
-                                                            },
-                                                            maxLength: {
-                                                                value: 15,
-                                                                message: 'Name may contain a maximum of 15 characters',
-                                                            },
-                                                        }}
-                                                        register={register}
-                                                        errors={errors}
-                                                    />
-                                                    <InputComponent
-                                                        inputType="number"
-                                                        inputName="bpm"
-                                                        inputId="bpm-field"
-                                                        inputLabel="BPM"
-                                                        validationRules={{
-                                                            required:  {
-                                                                value: true,
-                                                                message: 'This field is required'
-                                                            },
-                                                            min: {
-                                                                value: 50,
-                                                                message: 'Input not a valid BPM amount',
-                                                            },
-                                                            max: {
-                                                                value: 199,
-                                                                message: 'Input not a valid BPM amount',
-                                                            }
-                                                        }}
-                                                        register={register}
-                                                        errors={errors}
-                                                    />
-                                                    <InputComponent
-                                                        inputType="number"
-                                                        inputName="price"
-                                                        inputId="price-field"
-                                                        inputLabel="Price"
-                                                        validationRules={{
-                                                            required:  {
-                                                                value: true,
-                                                                message: 'This field is required'
-                                                            },
-                                                            min: {
-                                                                value: 1,
-                                                                message: 'Price lower then &euro; 1 not allowed',
-                                                            },
-                                                            max: {
-                                                                value: 1000,
-                                                                message: 'Price higher then &euro; 1000 not allowed',
-                                                            },
-                                                        }}
-                                                        register={register}
-                                                        errors={errors}
-                                                    />
-                                                    <InputComponent
-                                                        inputType="file"
-                                                        inputName="file"
-                                                        inputId="file-field"
-                                                        inputLabel="Music File"
-                                                        validationRules={{
-                                                            required:  {
-                                                                value: true,
-                                                                message: 'This field is required'
-                                                            },
-                                                        }}
-                                                        register={register}
-                                                        errors={errors}
-                                                        onChange={handleFileChange}
-                                                    />
-                                                    <InputComponent
-                                                        inputType="file"
-                                                        inputName="image"
-                                                        inputId="image-field"
-                                                        inputLabel="Image"
-                                                        validationRules={{
-                                                            required:  {
-                                                                value: true,
-                                                                message: 'This field is required'
-                                                            },
-                                                        }}
-                                                        register={register}
-                                                        errors={errors}
-                                                        onChange={handleImageChange}
-                                                    />
-                                                    <button type="submit" className="btn btn-small">Add</button>
-                                                </form>
-                                                {error && <p>Something went wrong, please try again.</p>}
-                                            </div>
-                                            <img src={newyork} alt="New York Panorama" />
-
-                                        </div>
-                                    )}
-                                </Popup>
-
+                                <BeatsTab user={user} error={error} toggleError={toggleError} fetchUser={fetchUser} />
                             </div>
 
                             <div className="aside-content-block hide" id="myOrders">
-                                <h2>My Orders</h2>
+                                <OrderTabs user={user} error={error} toggleError={toggleError} />
+                            </div>
 
-                                { Object.keys(user).length > 0 &&
-                                user.orderList.length > 0 ? user.orderList.map((order) =>
-
-                                    <BeatBlock title={order.beat.title} artist="artist 1" bpm={order.beat.bpm}>
-                                        <ButtonComponent classNames="btn btn-small btn-border btnReset" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=
-                                            `http://localhost:8080/beats/${order.beat.id}/file`} />
-                                    </BeatBlock>
-                                ) : <p>No beats</p>
-                                }
+                            <div className="aside-content-block hide" id="myAdmin">
+                                <AdminTab />
                             </div>
 
                         </div>

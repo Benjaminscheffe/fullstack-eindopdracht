@@ -1,13 +1,13 @@
 import './ButtonComponent.scss';
 
-function ButtonComponent( {classNames, buttonText, noteIcon, downloadIcon, editIcon, buttonFunction }) {
-    console.log(classNames);
+function ButtonComponent( {classNames, buttonText, noteIcon, downloadIcon, editIcon, reviewIcon, buttonFunction }) {
     return (
         <button className={`btn ${classNames}`} onClick={buttonFunction}>
             { buttonText }
             { noteIcon && <> <i className="fa-solid fa-music"></i></> }
             { downloadIcon && <> <i className="fa-solid fa-download"></i></> }
             { editIcon && <> <i className="fa-solid fa-gear"></i></> }
+            {reviewIcon && <> <i className="fa-solid fa-pen"></i></> }
         </button>
     );
 }

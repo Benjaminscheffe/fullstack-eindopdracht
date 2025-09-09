@@ -1,28 +1,32 @@
 import './LoginPage.scss';
 import VisualTextBlock from "../../components/visualTextBlock/VisualTextBlock.jsx";
 import {Link} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
+import {AuthContext} from "../../context/AuthContext.jsx";
 import axios from "axios";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useForm} from "react-hook-form";
 
 function LoginPage() {
+    const { login } = useContext(AuthContext);
     const [user, setUser] = useState({});
     const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
 
     async function handleFormSubmit(data) {
-        console.log(data);
+        console.log(login);
         toggleError(false);
 
         try {
-            const response = await axios.post(`http://localhost:8080/users/`, data, {
+            const response = await axios.post(`http://localhost:8080/authenticate`, data, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
 
-            console.log(response);
+            console.log(response.data);
+
+            login(response.data);
         } catch (e) {
             console.error(e);
 
@@ -38,9 +42,9 @@ function LoginPage() {
                         <form onSubmit={handleSubmit(handleFormSubmit)}>
                             <InputComponent
                                 inputType="text"
-                                inputName="email"
-                                inputId="email-field"
-                                inputLabel="Email"
+                                inputName="username"
+                                inputId="username-field"
+                                inputLabel="Username"
                                 validationRules={{
                                     required:  {
                                         value: true,
@@ -66,6 +70,7 @@ function LoginPage() {
                             />
                             <button type="submit" className="btn btn-small">Login</button>
                         </form>
+                        { error && <p>Something went wrong!!</p>}
                     </div>
                     <h2>Not yet a customer?</h2>
                     <p>Register now and get 5% discount code.</p>
