@@ -2,6 +2,7 @@ import {createContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 import {isTokenValid} from "../helpers/isTokenValid";
+import axios from "axios";
 
 
 export const AuthContext = createContext({});
@@ -13,25 +14,55 @@ function AuthContentProvider({ children }) {
         status: 'pending',
     });
 
+    async function checkAuthentication() {
+        try {
+            const response = await axios.get("http://localhost:8080/authenticated", {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+
+            return response;
+
+        } catch (e) {
+            console.error(e);
+
+            logout();
+        }
+
+    }
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('id');
 
-        if(token) {
-            const decoded = jwtDecode(token);
-            console.log(decoded);
+        if (token) {
+            try {
 
-            if (isTokenValid(decoded)) {
-                // Ja dan halen wev de userinfo op en zetten we hem in de state
-                setAuth({
-                    isAuth: true,
-                    user: userId,
-                    status: 'done',
-                })
-            } else {
+                const response = checkAuthentication();
+
+                console.log(response);
+                const decoded = jwtDecode(token);
+                console.log(decoded);
+
+                if (isTokenValid(decoded)) {
+                    // Ja dan halen wev de userinfo op en zetten we hem in de state
+                    setAuth({
+                        isAuth: true,
+                        user: userId,
+                        status: 'done',
+                    })
+                } else {
+                    logout();
+                }
+            } catch (e) {
+                console.error(e);
                 logout();
             }
-        } else {
+        }
+
+     else {
             setAuth({
                 ...auth,
                 status: 'done',
@@ -72,7 +103,7 @@ function AuthContentProvider({ children }) {
             status: 'done',
         });
 
-        navigate('/')
+        navigate('/');
     }
 
     const data = {
