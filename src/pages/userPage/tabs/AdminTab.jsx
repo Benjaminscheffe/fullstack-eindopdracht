@@ -64,23 +64,7 @@ function AdminTab() {
             toggleError(true);
         } finally {
 
-            //fetchUser();
-        }
-    }
-
-    async function editBeat(id) {
-        console.log(id);
-        try {
-            const response = await axios.delete(`http://localhost:8080/beats/${id}`);
-            console.log(response.data);
-
-        } catch (e) {
-            console.error(e);
-
-            toggleError(true);
-
-        } finally {
-            toggleLoading(false);
+            await fetchUsers();
         }
     }
 
@@ -101,8 +85,11 @@ function AdminTab() {
 
                         user.beats.length > 0 ? user.beats.map((beat) =>
                             <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
-                                <button className="btn btn-small btn-border btnReset" onClick={() => {setCurrentBeat(beat); openTooltip(); }}>
-                                    Edit <i className="fa-solid fa-xmark"></i>
+                                <button className="btn btn-small btn-border btnReset" onClick={() => {
+                                    setCurrentBeat(beat);
+                                    openTooltip();
+                                }}>
+                                    Edit <i className="fa-solid fa-pen"></i>
                                 </button>
                             </BeatBlock>) : <p>No beats</p>
                         }
