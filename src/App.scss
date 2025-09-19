@@ -5,7 +5,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
 
 /* Text font */
-@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Mono:ital,wght@0,300..700;1,300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Mono:wght@300..700&display=swap');
 
 
 /*////////////////////////////////////////////////////////////////////////
@@ -36,12 +36,18 @@ h2,
 h3,
 h4,
 h5 {
-  font-family: "Roboto", sans-serif;
+  font-family: "Red Hat Mono", sans-serif;
   font-optical-sizing: auto;
   font-weight: 700;
   font-style: normal;
   font-variation-settings: "wdth" 90;
+  line-height: 1.1;
   margin: 0 0 1rem;
+}
+
+h1, h2 {
+  font-family: "Zen Dots", sans-serif;
+  text-transform: uppercase;
 }
 
 ul {
@@ -54,6 +60,7 @@ ul {
 }
 
 p {
+  line-height: 1.8;
   margin-bottom: 1rem;
 }
 
@@ -151,6 +158,19 @@ main {
 
   @media only screen and (max-width: 767px) {
     max-width: 640px;
+  }
+
+  @media only screen and (max-width: 500px) {
+    max-width: 420px;
+  }
+}
+
+.extra-small-container {
+  max-width: 660px;
+
+
+  @media only screen and (max-width: 767px) {
+    max-width: 540px;
   }
 
   @media only screen and (max-width: 500px) {

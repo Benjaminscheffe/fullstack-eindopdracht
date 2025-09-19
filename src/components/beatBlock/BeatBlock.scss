@@ -1,8 +1,7 @@
   .beat-block {
-    background: #000;
-    color: #FFF;
-    padding: 0 2rem 0 0;
-    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #FFF;
 
     @media only screen and (max-width: 1200px) {
       font-size: 1rem;
@@ -10,8 +9,8 @@
 
     @media only screen and (max-width: 767px) {
       flex-direction: column;
-      padding: 0 0 1rem 0;
-      gap: 1rem;
+      padding: 0 0 1.5rem 0;
+      gap: 1.5rem;
 
       .flexBox {
         width: 100%;
@@ -19,7 +18,6 @@
       }
 
       &-cta {
-        padding: 0 1rem;
         width: 100%;
 
         button {
@@ -39,17 +37,11 @@
       }
     }
 
-    &-info {
-      h3 {
-        margin-bottom: 0.5em;
+    &-info p {
+      line-height: 2;
+      margin-bottom: 0;
+       span {
+         font-weight: 700;
       }
-
-      h4 {
-        margin-bottom: 0.25em;
-      }
-    }
-
-    &-cta button i {
-      color: #FFF;
     }
   }
