@@ -459,6 +459,11 @@ img {
   font-weight: 500;
   cursor: pointer;
 
+  &-inverted {
+    background-color: #FFF;
+    color: #000;
+  }
+
   &-small {
     padding: 0.25rem 0.5rem;
     font-size: 0.9rem;
@@ -494,8 +499,12 @@ input {
 }
 
 .form-block {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #FFF;
   margin-bottom: 2rem;
+
+  .btn {
+    margin-top: 0.5rem;
+  }
 }
 
 .error-message {

@@ -5,6 +5,7 @@ import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useState} from "react";
 import axios from "axios";
 import toast, {Toaster} from 'react-hot-toast';
+import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
 
 function RegisterPage() {
     const [error, toggleError] = useState(false);
@@ -101,7 +102,7 @@ function RegisterPage() {
                                 register={register}
                                 errors={errors}
                             />
-                            <button type="submit" className="btn btn-small">Register</button>
+                            <ButtonComponent type="submit" classNames="btn-small btn-inverted" buttonText="Register" />
                         </form>
                     </div>
                     { error && <p>Something went wrong!!</p>}
