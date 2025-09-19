@@ -49,15 +49,15 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
             console.log(responseImage.data);
 
             closeTooltip();
-
+            notify();
 
         } catch (e) {
             console.error(e);
 
             toggleError(true);
         } finally {
-            fetchUser();
-            notify();
+
+            //fetchUser();
         }
     }
 
