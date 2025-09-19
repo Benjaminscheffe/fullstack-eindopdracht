@@ -1,7 +1,7 @@
 /*  Titles + labels form */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@0,90,100..900;1,90,100..900&display=swap');
 
-/* Header Title */
+/* HeaderComponent Title */
 @import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
 
 /* Text font */
@@ -13,7 +13,7 @@ Table of Contents:
     1. Global Styles
     2. Typografie
     3. Areas
-        3.1 Header
+        3.1 HeaderComponent
         3.2 Testimonial
         3.3 Support
         3.4 Faq
@@ -90,10 +90,13 @@ p {
 
 /* Global Setup */
 body {
+  background-color: #121212;
+  color: #FFF;
   font-family: "Red Hat Mono", monospace;
-  font-weight: 300;
+  font-weight: 200;
   font-style: normal;
   font-size: 16px;
+  font-variation-settings: "wdth" 90;
 }
 
 main {
@@ -256,271 +259,6 @@ main {
   display: none;
 }
 
-/*////////////////////////
-    2. Typography
-////////////////////////*/
-
-h1 {
-  font-size: 3.5rem;
-  margin-bottom: 0.5em !important;
-}
-/*  Titles + labels form */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wdth,wght@0,90,100..900;1,90,100..900&display=swap');
-
-/* Header Title */
-@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
-
-/* Text font */
-@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Mono:ital,wght@0,300..700;1,300..700&display=swap');
-
-
-/*////////////////////////////////////////////////////////////////////////
-Table of Contents:
-    1. Global Styles
-    2. Typografie
-    3. Areas
-        3.1 Header
-        3.2 Testimonial
-        3.3 Support
-        3.4 Faq
-        3.5 Footer
-////////////////////////////////////////////////////////////////////////*/
-
-/*////////////////////////
-    1. Global Styles
-////////////////////////*/
-
-/* CSS Reset */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-family: "Roboto", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: 700;
-  font-style: normal;
-  font-variation-settings: "wdth" 90;
-  margin: 0 0 1rem;
-}
-
-ul {
-  list-style: none;
-  margin-bottom: 1rem;
-
-  li {
-    line-height: 1.8;
-  }
-}
-
-p {
-  margin-bottom: 1rem;
-}
-
-.btnReset {
-  border: none;
-  background: none;
-}
-
-.no-padding-top {
-  padding-top: 0 !important;
-}
-
-.no-margin {
-  margin: 0 !important;
-}
-
-/* CSS Variables */
-:root {
-  --headerColor: #000;
-  --headerFont: ;
-  --textColor: #000;
-  --textFont: ;
-}
-
-/* font-styling */
-
-.text-align-center {
-  text-align: center;
-}
-
-.text-transform-uppercase {
-  text-transform: uppercase;
-}
-
-/* Global Setup */
-body {
-  font-family: "Red Hat Mono", monospace;
-  font-weight: 300;
-  font-style: normal;
-  font-size: 16px;
-}
-
-main {
-  min-height: calc(100vh - 260px);
-  height: 100%;
-
-  @media only screen and (max-width: 767px) {
-    min-height: calc(100vh - 240px);
-  }
-
-  @media only screen and (max-width: 500px) {
-    min-height: calc(100vh - 220px);
-  }
-}
-
-.main-content-block {
-  padding: 5rem 0 5rem;
-
-  @media only screen and (max-width: 1200px) {
-    padding: 4rem 0 4rem;
-  }
-
-  @media only screen and (max-width: 767px) {
-    padding: 3rem 0 3rem;
-  }
-
-  @media only screen and (max-width: 500px) {
-    padding: 2rem 0 2rem;
-  }
-}
-
-.container {
-  max-width: 1140px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 0 2rem;
-  @media only screen and (max-width: 767px) {
-    padding: 0 1.5rem;
-  }
-
-  @media only screen and (max-width: 500px) {
-    padding: 0 1rem;
-  }
-}
-
-.small-container {
-  max-width: 860px;
-
-  @media only screen and (max-width: 1200px) {
-    max-width: 720px;
-  }
-
-  @media only screen and (max-width: 767px) {
-    max-width: 640px;
-  }
-
-  @media only screen and (max-width: 500px) {
-    max-width: 420px;
-  }
-}
-
-.flexBox {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.justify-content {
-  &-space-between {
-    justify-content: space-between;
-  }
-
-  &-flex-start {
-    justify-content: flex-start;
-  }
-
-  &-center {
-    justify-content: center;
-  }
-}
-
-.align-items {
-  &-top {
-    align-items: start;
-  }
-
-  &-stretch {
-    align-items: stretch;
-  }
-}
-
-.flex {
-  &-20 {
-    flex: 0 0 20%;
-  }
-  &-30 {
-    flex: 0 0 30%;
-  }
-  &-40 {
-    flex: 0 0 40%;
-  }
-  &-50 {
-    flex: 0 0 50%;
-  }
-  &-60 {
-    flex: 0 0 60%;
-  }
-  &-70 {
-    flex: 0 0 70%;
-  }
-  &-80 {
-    flex: 0 0 80%;
-  }
-
-  @media only screen and (max-width: 767px) {
-    &-20 {
-      flex: 0 0 100%;
-    }
-    &-30 {
-      flex: 0 0 100%;
-    }
-    &-40 {
-      flex: 0 0 100%;
-    }
-    &-50 {
-      flex: 0 0 100%;
-    }
-    &-60 {
-      flex: 0 0 100%;
-    }
-    &-70 {
-      flex: 0 0 100%;
-    }
-    &-80 {
-      flex: 0 0 100%;
-    }
-  }
-}
-
-.gap {
-  gap: 0.5rem;
-
-  &-1 {
-    gap: 1rem;
-  }
-  &-2 {
-    gap: 2rem;
-  }
-  &-4 {
-    gap: 4rem;
-  }
-}
-
-.w-100 {
-  width: 100%;
-}
-
-.hide {
-  display: none;
-}
 
 /*////////////////////////
     2. Typography
@@ -528,7 +266,7 @@ main {
 
 h1 {
   font-size: 3.5rem;
-  margin-bottom: 0.5em !important;
+  margin-bottom: 0.75rem;
 }
 
 h2 {
@@ -609,65 +347,7 @@ img {
   }
 }
 
-/* Hero */
 
-.hero {
-  background: url("./assets/images/hero.jpeg");
-  background-size: cover;
-  height: calc(100vh - 100px);
-
-  @media only screen and (max-width: 767px) {
-    height: calc(100vh - 80px);
-  }
-
-  @media only screen and (max-width: 500px) {
-    height: calc(100vh - 60px);
-  }
-  position: relative;
-  z-index: 0;
-
-  &:after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: url("./assets/images/grunge.jpg");
-    background-size: cover;
-    opacity: 0.5;
-  }
-}
-
-.hero-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  position: relative;
-  z-index: 2;
-
-  h1 {
-    color: #FFF;
-    font-family: "Zen Dots", sans-serif;
-    font-size: 4em;
-    text-transform: uppercase;
-    margin-bottom: 4.5rem;
-
-    @media only screen and (max-width: 1200px) {
-      font-size: 3rem;
-    }
-
-    @media only screen and (max-width: 767px) {
-      font-size: 2.5rem;
-    }
-
-    @media only screen and (max-width: 500px) {
-      font-size: 2rem;
-    }
-  }
-}
 
 /* Forms */
 
@@ -723,14 +403,7 @@ input {
 }
 
 
-/* footer */
 
-footer {
-  height: 160px;
-  padding: 3rem 0;
-  background: #000;
-  color: #FFF
-}
 h2 {
   font-size: 2rem;
 }
@@ -801,66 +474,6 @@ img {
   }
 }
 
-/* Hero */
-
-.hero {
-  background: url("./assets/images/hero.jpeg");
-  background-size: cover;
-  height: calc(100vh - 100px);
-
-  @media only screen and (max-width: 767px) {
-    height: calc(100vh - 80px);
-  }
-
-  @media only screen and (max-width: 500px) {
-    height: calc(100vh - 60px);
-  }
-  position: relative;
-  z-index: 0;
-
-  &:after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: url("./assets/images/grunge.jpg");
-    background-size: cover;
-    opacity: 0.5;
-  }
-}
-
-.hero-inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  position: relative;
-  z-index: 2;
-
-  h1 {
-    color: #FFF;
-    font-family: "Zen Dots", sans-serif;
-    font-size: 4em;
-    text-transform: uppercase;
-    margin-bottom: 4.5rem;
-
-    @media only screen and (max-width: 1200px) {
-      font-size: 3rem;
-    }
-
-    @media only screen and (max-width: 767px) {
-      font-size: 2.5rem;
-    }
-
-    @media only screen and (max-width: 500px) {
-      font-size: 2rem;
-    }
-  }
-}
-
 /* Forms */
 
 form {
@@ -912,14 +525,4 @@ input {
   right: 36px;
   top: 32px;
   font-size: 1.5rem;
-}
-
-
-/* footer */
-
-footer {
-  height: 160px;
-  padding: 3rem 0;
-  background: #000;
-  color: #FFF
 }

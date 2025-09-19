@@ -20,7 +20,7 @@
 
   &-visual {
     flex: 0 0 33%;
-    background: url("./../../assets/images/ghettoblaster.jpg"), url("./../../assets/images/grunge.jpg");
+    background: url("./../../assets/images/ghettoblaster.jpg");
     background-size: cover;
     background-blend-mode: overlay;
     color: #FFF;
@@ -30,6 +30,7 @@
     flex-direction: column;
     h3 {
       font-size: 2.5rem;
+      text-shadow: 0 2px 4px #121212;
     }
   }
 

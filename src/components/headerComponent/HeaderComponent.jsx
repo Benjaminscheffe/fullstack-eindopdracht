@@ -1,9 +1,10 @@
-import './Header.scss';
+import './HeaderComponent.scss';
 import {useContext, useState} from "react";
 import {NavLink} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext.jsx";
+import logo from "../../assets/images/logo.png"
 
-function Header() {
+function HeaderComponent() {
 
     const [isActive, setActive] = useState("false");
     const ToggleClass = () => {
@@ -19,11 +20,11 @@ function Header() {
     return (
         <header>
             <div className="container flexBox">
-                <div className="flexBox justify-content-flex-start">
+                <div className="flexBox justify-content-flex-start text-align-center">
                     <button className="btnReset menuBtn" onClick={ToggleClass}>
-                        <i className={!isActive ? "fa-solid fa-xmark" : "fa-solid fa-bars"}></i
-                        ></button>
-                    <NavLink to="/">BeatsForSale</NavLink>
+                        <i className={!isActive ? "fa-solid fa-xmark" : "fa-solid fa-bars"}></i>
+                    </button>
+                    <NavLink to="/" className="flexBox"><img className="logo" src={logo} /></NavLink>
                 </div>
                 <nav>
                     <ul className="flexBox gap-2">
@@ -64,4 +65,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default HeaderComponent;
