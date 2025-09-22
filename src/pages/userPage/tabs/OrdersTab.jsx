@@ -6,6 +6,7 @@ import toast, {Toaster} from "react-hot-toast";
 import {useForm} from "react-hook-form";
 import {useRef, useState} from "react";
 import axios from "axios";
+import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
 
 function OrderTabs({ user, error, toggleError }) {
     const [currentBeat, setCurrentBeat] = useState(null);
@@ -49,16 +50,26 @@ function OrderTabs({ user, error, toggleError }) {
               user.orderList.length > 0 ? user.orderList.map((order) =>
 
                   <li>
-                      <ul>
+                      <ul className="order-block">
                           <li>Ordernumber: { order.id }</li>
                           <li>Order date: { dateFormatter(order.orderDate)}</li>
-                          <li className="flexBox justify-content-flex-start gap">
-                              <ButtonComponent classNames="btn btn-small btn-border btnReset" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=`http://localhost:8080/beats/${order.beatId}/file`} />
+                          <li>
+                              <BeatBlock title={order.beat.title} artist={order.beat.userName} bpm={order.beat.bpm}  image={`http://localhost:8080/beats/${order.beat.id}/image`}>
+                                  {/*<button className="btn btn-small btn-border btnReset">*/}
+                                  {/*    Edit <i className="fa-solid fa-gear"></i>*/}
+                                  {/*</button>*/}
 
-                              <button onClick={() => {setCurrentBeat(order.beatId); openTooltip()}} type="submit" className="btn btn-small">Add review</button>
+                                  <ButtonComponent classNames="btn btn-small btn-inverted" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=`http://localhost:8080/beats/${order.beat.id}/file`} />
 
+                                  <button onClick={() => {setCurrentBeat(order.beat.id); openTooltip()}} type="submit" className="btn btn-small btn-inverted">Add review</button>
+                              </BeatBlock>
                           </li>
-                          <li><br/><hr/></li>
+                          {/*<li className="flexBox justify-content-flex-start gap">*/}
+                          {/*    <ButtonComponent classNames="btn btn-small btn-inverted" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=`http://localhost:8080/beats/${order.beatId}/file`} />*/}
+
+                          {/*    <button onClick={() => {setCurrentBeat(order.beatId); openTooltip()}} type="submit" className="btn btn-small btn-inverted">Add review</button>*/}
+
+                          {/*</li>*/}
                       </ul>
                   </li>
                   ) : <li>No orders yet.</li>

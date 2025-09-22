@@ -70,7 +70,7 @@ function UserPage() {
     return (
         <main>
             <div className="container small-container">
-                <div className="main-content-block">
+                <div className="main-content-block user-page">
                     <h1>Your Account</h1>
                     <section className="flexBox justify-content-flex-start align-items-top">
                         <aside className="flex-30">

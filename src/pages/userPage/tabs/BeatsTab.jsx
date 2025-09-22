@@ -7,7 +7,7 @@ import {useRef, useState} from "react";
 import {useForm} from "react-hook-form";
 import toast, {Toaster} from 'react-hot-toast';
 
-function BeatsTab({ user, error, toggleError, fetchUser }) {
+function BeatsTab({ user, error, toggleError }) {
     const [file, setFile] = useState([]);
     const [image, setImage] = useState([]);
     const { register, handleSubmit, formState: {errors} } = useForm();
@@ -81,14 +81,14 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
             { Object.keys(user).length > 0 &&
 
             user.beats.length > 0 ? user.beats.map((beat) =>
-                <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
-                    <button className="btn btn-small btn-border btnReset">
-                        Edit <i className="fa-solid fa-gear"></i>
-                    </button>
+                <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
+                    {/*<button className="btn btn-small btn-border btnReset">*/}
+                    {/*    Edit <i className="fa-solid fa-gear"></i>*/}
+                    {/*</button>*/}
                 </BeatBlock>) : <p>No beats</p>
             }
 
-            <Popup ref={ref} trigger={<button className="btn btn-small">Add a beat <i className="fa-solid fa-music"></i></button>} modal>
+            <Popup ref={ref} trigger={<button className="btn btn-small btn-inverted">Add a beat <i className="fa-solid fa-music"></i></button>} modal>
                 {close => (
                     <div className="popup">
 

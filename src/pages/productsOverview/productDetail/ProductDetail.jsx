@@ -5,6 +5,8 @@ import axios from "axios";
 import {AuthContext} from "../../../context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import toast, {Toaster} from 'react-hot-toast';
+import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
+import ButtonComponent from "../../../components/buttonComponent/ButtonComponent.jsx";
 
 function ProductDetail() {
     const [beat, setBeat] = useState({});
@@ -120,30 +122,44 @@ function ProductDetail() {
         <main>
             <Toaster />
             <section className="main-content-block">
-                <div className="container small-container ">
-                    <div className="detail-page justify-content-flex-start flexBox align-items-top gap-2 w-100">
-                        <div className="detail-page-image"></div>
+                <div className="container extra-small-container ">
+                    <div className="detail-page w-100">
                         <div className="detail-page-info">
                             { Object.keys(beat).length > 0 ?
                                 <>
-                                    <h4>Title: {beat.title}</h4>
-                                    <h5>{beat.userId}</h5>
-                                    <ul>
-                                        <li>{beat.bpm}</li>
-                                        <li>{beat.price}</li>
-                                    </ul>
-                                    <audio controls controlsList="nodownload">
-                                        <source src={`http://localhost:8080/beats/${beat.id}/file`}
-                                                type="audio/mpeg">
-                                        </source>
-                                        The browser doesn't support this audio!
-                                    </audio>
-                                    <br /><br />
+                                    <div className="flexBox no-wrap gap-1 title-block">
+                                        <h2>{beat.title}</h2>
+                                        <a href="/beats" className="btn btn-small btn-inverted">
+                                            <i className="fa-solid fa-chevron-left"></i> <span className="hide-on-mobile">Back to overview</span>
+                                        </a>
+                                    </div>
+                                    <BeatBlock artist={beat.userName} bpm={beat.bpm} price={beat.price} image={`http://localhost:8080/beats/${beat.id}/image`} error={error}>
+                                        <ButtonComponent classNames="btn-small btn-border btn-inverted btnReset" buttonText="buy" noteIcon={true} buttonFunction={() => placeOrder()}  />
+                                    </BeatBlock>
 
-                                    <button className="btn btn" onClick={placeOrder}>
-                                        BUY
-                                        <i className="fa-solid fa-cart-shopping"></i>
-                                    </button>
+                                    <div className="audio-block">
+                                        <audio controls controlsList="nodownload">
+                                            <source src={`http://localhost:8080/beats/${beat.id}/file`}
+                                                    type="audio/mpeg">
+                                            </source>
+                                            The browser doesn't support this audio!
+                                        </audio>
+                                    </div>
+
+                                    <h3 className="text-transform-uppercase">Reviews</h3>
+                                    <ul>
+                                        { beat.reviews.length > 0 ? beat.reviews.map((review) =>
+
+                                            <li><span className="font-weight-700 text-transform-uppercase">{ review.username }</span> <br /> score: { review.score } <br/> "{ review.comment }"</li>
+                                            ) :
+                                            <li>No reviews yet</li>
+                                        }
+                                    </ul>
+
+                                    {/*<button className="btn btn" onClick={placeOrder}>*/}
+                                    {/*    BUY*/}
+                                    {/*    <i className="fa-solid fa-cart-shopping"></i>*/}
+                                    {/*</button>*/}
 
                                     </> : <p>Deze beat is niet beschikbaar</p>
                             }
@@ -152,17 +168,7 @@ function ProductDetail() {
                             {beat.length === 0 && error && <p>Er ging iets mis bij het ophalen van de data...</p>}
                             </div>
                         </div>
-                        <h3>Reviews</h3>
 
-                        <ul>
-                            { Object.keys(beat).length > 0 &&
-                            beat.reviews.length > 0 ? beat.reviews.map((review) =>
-
-                                    <li>{ review.username } - score: { review.score } <br/> "{ review.comment }"</li>
-                                ) :
-                                <li>No reviews yet</li>
-                            }
-                        </ul>
                     </div>
 
 
