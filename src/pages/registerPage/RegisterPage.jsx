@@ -4,13 +4,15 @@ import { useForm } from "react-hook-form";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useState} from "react";
 import axios from "axios";
-import toast, {Toaster} from 'react-hot-toast';
+// import toast, {Toaster} from 'react-hot-toast';
 import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
+import {useNavigate} from "react-router-dom";
 
 function RegisterPage() {
     const [error, toggleError] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
-    const notify = () => toast('Registered successfully!')
+    // const notify = () => toast('Registered successfully!')
+    const navigate = useNavigate();
 
     async function handleFormSubmit(data) {
         toggleError(false);
@@ -23,13 +25,13 @@ function RegisterPage() {
                         'Content-Type': 'application/json',
                     }
                 })
-            console.log(response);
             console.log(response.data);
+
         } catch (e) {
             console.error(e);
             toggleError(true);
         } finally {
-            notify();
+            navigate('/success' , {state: {registered: true }});
         }
     }
 
@@ -81,7 +83,7 @@ function RegisterPage() {
                                 errors={errors}
                             />
                             <InputComponent
-                                inputType="text"
+                                inputType="password"
                                 inputName="password"
                                 inputId="password-field"
                                 inputLabel="Password"
@@ -108,7 +110,6 @@ function RegisterPage() {
                     { error && <p>Something went wrong!!</p>}
                 </VisualTextBlock>
             </section>
-            <Toaster />
         </main>
     );
 }

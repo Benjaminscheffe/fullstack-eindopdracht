@@ -29,7 +29,11 @@ function AdminTab() {
         toggleError(false);
 
         try {
-            const response = await axios.get('http://localhost:8080/users');
+            const response = await axios.get('http://localhost:8080/users', {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
             console.log(response.data);
 
             setUsers(response.data);
@@ -50,7 +54,11 @@ function AdminTab() {
         toggleError(false);
 
         try {
-            const responseData = await axios.put(`http://localhost:8080/beats/${currentBeat.id}`, data);
+            const responseData = await axios.put(`http://localhost:8080/beats/${currentBeat.id}`, data, {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
 
             console.log(responseData);
 
@@ -72,20 +80,17 @@ function AdminTab() {
         <>
             <h2>Admin</h2>
 
-            <h3>All users</h3>
+            <h3 className="text-transform-uppercase">All users</h3>
             <ul>
                 { users.length > 0 ? users.map((user) =>
                     <li>
-                        <div  className="flexBox">
-                            <div className="flex-50"><span className="font-weight-600">Id:</span> { user.id }</div>
-                            <div className="flex-50"><span className="font-weight-600">Username:</span> { user.username }</div>
-                        </div>
+                        <h4>Username: { user.username }</h4>
 
                         { Object.keys(user).length > 0 &&
 
                         user.beats.length > 0 ? user.beats.map((beat) =>
                             <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
-                                <button className="btn btn-small btn-border btnReset" onClick={() => {
+                                <button className="btn btn-small btn-inverted" onClick={() => {
                                     setCurrentBeat(beat);
                                     openTooltip();
                                 }}>
@@ -105,7 +110,7 @@ function AdminTab() {
                         <a className="close" onClick={close}>
                             <i className="fa-solid fa-xmark"></i>
                         </a>
-                        <h3>Add a beat</h3>
+                        <h3>Change the beat</h3>
                         <div className="form-block">
                             <form onSubmit={handleSubmit(handleFormSubmit)}>
                                 <InputComponent

@@ -6,15 +6,16 @@ import axios from "axios";
 import {useRef, useState} from "react";
 import {useForm} from "react-hook-form";
 import toast, {Toaster} from 'react-hot-toast';
+import {useNavigate} from "react-router-dom";
 
 function BeatsTab({ user, error, toggleError }) {
     const [file, setFile] = useState([]);
     const [image, setImage] = useState([]);
     const { register, handleSubmit, formState: {errors} } = useForm();
-    const notify = () => toast('Beat added successfully!')
-
+    //const notify = () => toast('Beat added successfully!')
+    const navigate = useNavigate();
     const ref = useRef();
-    const closeTooltip = () => ref.current.close();
+    //const closeTooltip = () => ref.current.close();
 
     async function handleFormSubmit(data) {
         toggleError(false);
@@ -28,28 +29,31 @@ function BeatsTab({ user, error, toggleError }) {
         formImage.append("file", image);
 
         try {
-            const responseData = await axios.post(`http://localhost:8080/beats`, data);
+            const responseData = await axios.post(`http://localhost:8080/beats`, data, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
 
+
+            await axios.post(`http://localhost:8080/beats/${responseData.data.id}/file`, formFile, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+
+            await axios.post(`http://localhost:8080/beats/${responseData.data.id}/image`, formImage, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
             console.log(responseData.data.id);
+            
+            navigate('/success' , {state: {beatId: responseData.data.id}});
 
-            const responseFile = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/file`, formFile, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-
-            const responseImage = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/image`, formImage, {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-
-            console.log(responseFile.data);
-
-            console.log(responseImage.data);
-
-            closeTooltip();
-            notify();
 
         } catch (e) {
             console.error(e);

@@ -12,6 +12,7 @@ import {AuthContext} from "./context/AuthContext.jsx";
 import {useContext} from "react";
 import {Navigate} from "react-router";
 import FooterComponent from "./components/footerComponent/FooterComponent.jsx";
+import SuccessPage from "./pages/successPage/SuccessPage.jsx";
 
 function App() {
     const { isAuth } = useContext(AuthContext);
@@ -30,6 +31,7 @@ function App() {
                 <Route path="*" element={<NotFoundPage/>} />
                 <Route path="/user/:id" element={ isAuth? <UserPage/> : <Navigate to='/login' /> } />
                 <Route path="/beats/:id" element={<ProductDetail/>} />
+                <Route path="/success" element={<SuccessPage />} />
             </Routes>
 
         <FooterComponent />

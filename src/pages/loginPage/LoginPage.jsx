@@ -56,7 +56,7 @@ function LoginPage() {
                                 errors={errors}
                             />
                             <InputComponent
-                                inputType="text"
+                                inputType="password"
                                 inputName="password"
                                 inputId="password-field"
                                 inputLabel="Password"

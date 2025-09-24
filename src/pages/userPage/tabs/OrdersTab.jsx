@@ -4,13 +4,13 @@ import Popup from "reactjs-popup";
 import InputComponent from "../../../components/inputComponent/InputComponent.jsx";
 import toast, {Toaster} from "react-hot-toast";
 import {useForm} from "react-hook-form";
-import {useRef, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import axios from "axios";
 import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
 
 function OrderTabs({ user, error, toggleError }) {
     const [currentBeat, setCurrentBeat] = useState(null);
-    const { register, handleSubmit, formState: {errors} } = useForm();
+    const { register, handleSubmit, reset, formState: {errors} } = useForm();
     const notify = () => toast('Review added successfully!');
     const ref = useRef();
     const closeTooltip = () => ref.current.close();
@@ -31,18 +31,20 @@ function OrderTabs({ user, error, toggleError }) {
             console.log(responseData.data);
 
             closeTooltip();
+            notify();
 
         } catch (e) {
             console.error(e.response.data);
 
             toggleError(true);
         } finally {
-            notify();
+            reset();
         }
     }
 
     return (
       <>
+          <Toaster position="bottom-center" reverseOrder={false} containerClassName="toast-container"/>
           <h2>My Orders</h2>
 
           <ul>
@@ -84,7 +86,7 @@ function OrderTabs({ user, error, toggleError }) {
                       </a>
                       <h3>Add a review</h3>
                       <div className="form-block">
-                          <form onSubmit={handleSubmit(handleFormSubmit)}>
+                          <form id="reviewForm" onSubmit={handleSubmit(handleFormSubmit)}>
                               <InputComponent
                                   inputType="score"
                                   inputName="score"
@@ -137,7 +139,6 @@ function OrderTabs({ user, error, toggleError }) {
                   </div>
               )}
           </Popup>
-          <Toaster position="bottom-center" reverseOrder={false} />
       </>
     );
 }

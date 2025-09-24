@@ -300,7 +300,15 @@ main {
 
 h1 {
   font-size: 3.5rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5em;
+
+  @media only screen and (max-width: 1024px) {
+    font-size: 3rem;
+  }
+
+  @media only screen and (max-width: 767px) {
+    font-size: 2.5rem;
+  }
 }
 
 h2 {
@@ -326,6 +334,7 @@ button {
 
 a {
   text-decoration: none;
+  color: #FFF;
 }
 
 p > a {
@@ -483,6 +492,12 @@ a:hover {
 
 img {
   width: 100%;
+}
+
+/* Toaster */
+
+.toast-container div {
+  opacity:1 !important;
 }
 
 
