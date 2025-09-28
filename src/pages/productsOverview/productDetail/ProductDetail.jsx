@@ -3,7 +3,6 @@ import {useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../../context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
 import toast, {Toaster} from 'react-hot-toast';
 import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
 import ButtonComponent from "../../../components/buttonComponent/ButtonComponent.jsx";
@@ -57,13 +56,17 @@ function ProductDetail() {
             const orderDate = { orderDate : date };
 
             try {
-                const response = await axios.post('http://localhost:8080/orders', orderDate);
+                const response = await axios.post('http://localhost:8080/orders', orderDate, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
 
                 console.log(response.data);
 
-                await assignUser(response.data.id);
-
                 await assignBeat(response.data.id);
+                await assignUser(response.data.id);
 
             } catch (e) {
                 console.error(e);
@@ -71,9 +74,6 @@ function ProductDetail() {
                 toggleError(true);
             } finally {
                 toggleLoading(false);
-
-                notifyBought();
-
             }
 
         }
@@ -84,11 +84,15 @@ function ProductDetail() {
         toggleError(false);
 
         try {
-            const response = await axios.put(`http://localhost:8080/orders/${id}/beat/${beat.id}`);
+            const response = await axios.put(`http://localhost:8080/orders/${id}/beat/${beat.id}`, null, {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
             console.log(response.data);
 
         } catch (e) {
-            console.error(e);
+            console.error(e.response.data);
 
             toggleError(true);
         } finally {
@@ -101,12 +105,17 @@ function ProductDetail() {
         toggleError(false);
 
         try {
-            const response = await axios.put(`http://localhost:8080/orders/${id}/user/${localStorage.getItem('id')}`);
+            const response = await axios.put(`http://localhost:8080/orders/${id}/user/${localStorage.getItem('id')}`, null, {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
 
             console.log(response.data);
+            notifyBought();
 
         } catch (e) {
-            console.error(e);
+            console.error(e.response.data);
 
             toggleError(true);
         } finally {
