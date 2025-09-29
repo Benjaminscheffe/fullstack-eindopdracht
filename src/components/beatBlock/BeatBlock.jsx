@@ -5,8 +5,8 @@ function BeatBlock({ title, artist, bpm, image, children, error, price }) {
 
     return (
         <>
-            <div className="beat-block flexBox gap-2">
-                <div className="flexBox no-wrap gap-2">
+            <div className="beat-block flexBox no-wrap gap-2">
+                <div className="flexBox gap-2">
                     <div className="beat-block-image">
                         <img src={image} alt={title} />
                     </div>

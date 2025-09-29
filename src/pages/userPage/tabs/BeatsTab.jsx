@@ -5,17 +5,14 @@ import newyork from "../../../assets/images/newyork-panorama.jpg";
 import axios from "axios";
 import {useRef, useState} from "react";
 import {useForm} from "react-hook-form";
-import toast, {Toaster} from 'react-hot-toast';
 import {useNavigate} from "react-router-dom";
 
 function BeatsTab({ user, error, toggleError }) {
     const [file, setFile] = useState([]);
     const [image, setImage] = useState([]);
     const { register, handleSubmit, formState: {errors} } = useForm();
-    //const notify = () => toast('Beat added successfully!')
     const navigate = useNavigate();
     const ref = useRef();
-    //const closeTooltip = () => ref.current.close();
 
     async function handleFormSubmit(data) {
         toggleError(false);
@@ -86,9 +83,6 @@ function BeatsTab({ user, error, toggleError }) {
 
             user.beats.length > 0 ? user.beats.map((beat) =>
                 <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
-                    {/*<button className="btn btn-small btn-border btnReset">*/}
-                    {/*    Edit <i className="fa-solid fa-gear"></i>*/}
-                    {/*</button>*/}
                 </BeatBlock>) : <p>No beats</p>
             }
 
@@ -207,7 +201,6 @@ function BeatsTab({ user, error, toggleError }) {
                     </div>
                 )}
             </Popup>
-            <Toaster />
         </>
     );
 }

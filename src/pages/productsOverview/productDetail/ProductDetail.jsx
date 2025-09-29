@@ -1,11 +1,12 @@
 import './ProductDetail.scss';
 import {useParams} from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import {useRef, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../../context/AuthContext.jsx";
 import toast, {Toaster} from 'react-hot-toast';
 import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
 import ButtonComponent from "../../../components/buttonComponent/ButtonComponent.jsx";
+import Popup from "reactjs-popup";
 
 function ProductDetail() {
     const [beat, setBeat] = useState({});
@@ -14,6 +15,8 @@ function ProductDetail() {
     const {isAuth} = useContext(AuthContext);
     const notifyLogin = () => toast('Login to buy beats!');
     const notifyBought = () => toast('Beat successfully added to your profile!');
+    const ref = useRef();
+    const closeTooltip = () => ref.current.close();
 
     useEffect(() => {
         async function fetchBeat() {
@@ -112,6 +115,7 @@ function ProductDetail() {
             });
 
             console.log(response.data);
+            closeTooltip()
             notifyBought();
 
         } catch (e) {
@@ -129,6 +133,7 @@ function ProductDetail() {
     return (
         <main>
             <Toaster />
+
             <section className="main-content-block">
                 <div className="container extra-small-container ">
                     <div className="detail-page w-100">
@@ -142,7 +147,22 @@ function ProductDetail() {
                                         </a>
                                     </div>
                                     <BeatBlock artist={beat.userName} bpm={beat.bpm} price={beat.price} image={`http://localhost:8080/beats/${beat.id}/image`} error={error}>
-                                        <ButtonComponent classNames="btn-small btn-border btn-inverted btnReset" buttonText="buy" noteIcon={true} buttonFunction={() => placeOrder()}  />
+
+                                        <Popup ref={ref} trigger={<button className="btn btn-small btn-inverted">get this beat</button>} modal>
+                                            {close => (
+                                                <div className="popup popup-detail-page">
+
+
+                                                    <h3>You are about to buy a beat</h3>
+                                                    <p>Are you sure?</p>
+                                                    <div className="flexBox gap-1 justify-content-flex-start">
+                                                        <ButtonComponent classNames="btn-small btn-inverted" buttonText="cancel" buttonFunction={close}
+                                                        />
+                                                        <ButtonComponent classNames="btn-small" buttonText="buy" noteIcon={true} buttonFunction={() => placeOrder()}  />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </Popup>
                                     </BeatBlock>
 
                                     <div className="audio-block">
@@ -158,7 +178,7 @@ function ProductDetail() {
                                     <ul>
                                         { beat.reviews.length > 0 ? beat.reviews.map((review) =>
 
-                                            <li><span className="font-weight-700 text-transform-uppercase">{ review.username }</span> <br /> score: { review.score } <br/> "{ review.comment }"</li>
+                                            <li><span className="font-weight-700 text-transform-uppercase" key={ review.id }>{ review.username }</span> <br /> score: { review.score } <br/> "{ review.comment }"</li>
                                             ) :
                                             <li>No reviews yet</li>
                                         }

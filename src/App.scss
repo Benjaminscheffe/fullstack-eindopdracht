@@ -292,8 +292,8 @@ img {
 /* button */
 
 .btn {
-  background: #000;
-  border: none;
+  background: #121212;
+  border: 1px solid #121212;
   color: #FFF;
   padding: 0.5rem 1em;
   font-size: 1rem;
@@ -301,10 +301,39 @@ img {
   border-radius: 2px;
   font-weight: 500;
   cursor: pointer;
+  transition: 0.3s linear;
+
+  i {
+    color: #FFF;
+    transition: color 0.3s linear;
+  }
+
+  &:hover {
+    background: #FFF;
+    color: #121212;
+
+    i {
+      color: #121212;
+    }
+  }
 
   &-inverted {
     background-color: #FFF;
-    color: #000;
+    color: #121212;
+
+    i {
+      color: #121212
+    }
+
+    &:hover {
+      background: #121212;
+      color: #FFF;
+      border: 1px solid #FFF;
+
+      i {
+        color: #FFF;
+      }
+    }
   }
 
   &-small {

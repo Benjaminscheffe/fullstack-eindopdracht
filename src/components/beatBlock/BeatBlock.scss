@@ -3,6 +3,10 @@
     margin-bottom: 1.5rem;
     border-bottom: 1px solid #FFF;
 
+    .flexBox {
+      flex-wrap: nowrap;
+    }
+
     @media only screen and (max-width: 1200px) {
       font-size: 1rem;
     }
@@ -15,6 +19,7 @@
       .flexBox {
         width: 100%;
         justify-content: flex-start;
+        flex-wrap: wrap;
       }
 
       &-cta {
