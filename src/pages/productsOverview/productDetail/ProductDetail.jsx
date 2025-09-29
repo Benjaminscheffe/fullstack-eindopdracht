@@ -124,7 +124,6 @@ function ProductDetail() {
     }
 
 
-
     const {id} = useParams();
 
     return (
@@ -164,11 +163,6 @@ function ProductDetail() {
                                             <li>No reviews yet</li>
                                         }
                                     </ul>
-
-                                    {/*<button className="btn btn" onClick={placeOrder}>*/}
-                                    {/*    BUY*/}
-                                    {/*    <i className="fa-solid fa-cart-shopping"></i>*/}
-                                    {/*</button>*/}
 
                                     </> : <p>Deze beat is niet beschikbaar</p>
                             }

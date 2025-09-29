@@ -4,6 +4,8 @@
   background: url("./../../assets/images/hero.jpeg");
   background-size: cover;
   height: calc(100vh - 100px);
+  position: relative;
+  z-index: 0;
 
   @media only screen and (max-width: 767px) {
     height: calc(100vh - 80px);
@@ -12,8 +14,6 @@
   @media only screen and (max-width: 500px) {
     height: calc(100vh - 60px);
   }
-  position: relative;
-  z-index: 0;
 
   &:after {
     content: '';
