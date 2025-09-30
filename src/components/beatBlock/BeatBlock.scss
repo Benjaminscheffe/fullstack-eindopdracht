@@ -1,8 +1,11 @@
   .beat-block {
-    background: #000;
-    color: #FFF;
-    padding: 0 2rem 0 0;
-    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #FFF;
+
+    .flexBox {
+      flex-wrap: nowrap;
+    }
 
     @media only screen and (max-width: 1200px) {
       font-size: 1rem;
@@ -10,17 +13,17 @@
 
     @media only screen and (max-width: 767px) {
       flex-direction: column;
-      padding: 0 0 1rem 0;
-      gap: 1rem;
+      padding: 0 0 1.5rem 0;
+      gap: 1.5rem;
 
       .flexBox {
         width: 100%;
         justify-content: flex-start;
+        flex-wrap: wrap;
       }
 
       &-cta {
-        padding: 0 1rem;
-        width: 100%;
+        flex: 0 0 100%;
 
         button {
           width: 100%;
@@ -39,17 +42,27 @@
       }
     }
 
-    &-info {
-      h3 {
-        margin-bottom: 0.5em;
-      }
-
-      h4 {
-        margin-bottom: 0.25em;
+    &-info p {
+      line-height: 2;
+      margin-bottom: 0;
+       span {
+         font-weight: 700;
       }
     }
+  }
 
-    &-cta button i {
-      color: #FFF;
+  .inverted {
+    background: #FFF;
+    padding: 1rem 1rem 0 1rem;
+    color: #121212;
+    margin-bottom: 1rem;
+    display: block;
+
+    .beat-block {
+      border-bottom: 1px solid #121212;
+
+      &:last-of-type {
+        border: none;
+      }
     }
   }

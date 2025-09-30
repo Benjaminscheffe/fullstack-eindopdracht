@@ -2,32 +2,30 @@ import ButtonComponent from "../../../components/buttonComponent/ButtonComponent
 import dateFormatter from "../../../helpers/dateFormatter.js";
 import Popup from "reactjs-popup";
 import InputComponent from "../../../components/inputComponent/InputComponent.jsx";
-import toast, {Toaster} from "react-hot-toast";
 import {useForm} from "react-hook-form";
 import {useRef, useState} from "react";
 import axios from "axios";
+import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
 
-function OrderTabs({ user, error, toggleError }) {
+function OrderTabs({ user, error, toggleError, toggleLoading, notify }) {
     const [currentBeat, setCurrentBeat] = useState(null);
-    const { register, handleSubmit, formState: {errors} } = useForm();
-    const notify = () => toast('Review added successfully!');
+    const { register, handleSubmit, reset, formState: {errors} } = useForm();
     const ref = useRef();
     const closeTooltip = () => ref.current.close();
     const openTooltip = () => ref.current.open();
 
     async function handleFormSubmit(data) {
         toggleError(false);
+        toggleLoading(true);
 
         data.beatId = currentBeat;
 
         try {
-            const responseData = await axios.post('http://localhost:8080/reviews', data,
+            await axios.post('http://localhost:8080/reviews', data,
                 {headers: {
                 'Content-Type': 'application/json',
                     'Authorization' : `Bearer ${localStorage.getItem("token")}`
             }});
-
-            console.log(responseData.data);
 
             closeTooltip();
 
@@ -36,29 +34,32 @@ function OrderTabs({ user, error, toggleError }) {
 
             toggleError(true);
         } finally {
+            toggleLoading(false);
+
             notify();
+            reset();
         }
     }
 
     return (
       <>
           <h2>My Orders</h2>
-
           <ul>
               { Object.keys(user).length > 0 &&
-              user.orderList.length > 0 ? user.orderList.map((order) =>
+              user.orderList.length > 0 ? user.orderList.sort((a, b) => a.id - b.id).map((order) =>
 
-                  <li>
-                      <ul>
+                  <li key={order.id}>
+                      <ul className="order-block">
                           <li>Ordernumber: { order.id }</li>
                           <li>Order date: { dateFormatter(order.orderDate)}</li>
-                          <li className="flexBox justify-content-flex-start gap">
-                              <ButtonComponent classNames="btn btn-small btn-border btnReset" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=`http://localhost:8080/beats/${order.beatId}/file`} />
+                          <li>
+                              <BeatBlock title={order.beat.title} artist={order.beat.userName} bpm={order.beat.bpm}  image={`http://localhost:8080/beats/${order.beat.id}/image`}>
 
-                              <button onClick={() => {setCurrentBeat(order.beatId); openTooltip()}} type="submit" className="btn btn-small">Add review</button>
+                                  <ButtonComponent classNames="btn btn-small btn-inverted" buttonText="Download" downloadIcon={true} buttonFunction={() => location.href=`http://localhost:8080/beats/${order.beat.id}/file`} />
 
+                                  <button onClick={() => {setCurrentBeat(order.beat.id); openTooltip()}} type="submit" className="btn btn-small btn-inverted">Add review</button>
+                              </BeatBlock>
                           </li>
-                          <li><br/><hr/></li>
                       </ul>
                   </li>
                   ) : <li>No orders yet.</li>
@@ -73,7 +74,7 @@ function OrderTabs({ user, error, toggleError }) {
                       </a>
                       <h3>Add a review</h3>
                       <div className="form-block">
-                          <form onSubmit={handleSubmit(handleFormSubmit)}>
+                          <form id="reviewForm" onSubmit={handleSubmit(handleFormSubmit)}>
                               <InputComponent
                                   inputType="score"
                                   inputName="score"
@@ -126,7 +127,6 @@ function OrderTabs({ user, error, toggleError }) {
                   </div>
               )}
           </Popup>
-          <Toaster position="bottom-center" reverseOrder={false} />
       </>
     );
 }

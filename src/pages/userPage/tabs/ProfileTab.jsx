@@ -1,4 +1,4 @@
-function ProfileTab({ user }) {
+function ProfileTab({ user, error }) {
     return (
         <>
             { Object.keys(user).length > 0 ?
@@ -14,13 +14,11 @@ function ProfileTab({ user }) {
                             <div className="flex-40 font-weight-500">Username</div>
                             <div className="flex-60">{user.username}</div>
                         </li>
-                        <li className="flexBox justify-content-flex-start">
-                            <div className="flex-40 font-weight-500">Firstname</div>
-                            <div className="flex-60">Slim</div>
-                        </li>
                     </ul>
                 </> : <p>User details not available</p>
             }
+
+            {error && <p>Something went wrong, please try again.</p>}
         </>
 
     );

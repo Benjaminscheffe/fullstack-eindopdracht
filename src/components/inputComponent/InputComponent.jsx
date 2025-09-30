@@ -1,11 +1,10 @@
-import './InputComponent.scss';
-
-function InputComponent({ inputType, inputName, inputLabel, inputId, validationRules, register, errors, onChange }) {
+function InputComponent({ inputType, inputName, inputLabel, inputId, validationRules, register, errors, onChange, accept }) {
     return (
         <label htmlFor={inputId}>
             {inputLabel}
             <input
                 type={inputType}
+                accept={accept}
                 {...register(inputName, validationRules)}
                 id="name-field"
                 onChange={onChange}

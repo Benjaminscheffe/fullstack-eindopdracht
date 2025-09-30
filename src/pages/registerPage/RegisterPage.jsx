@@ -4,31 +4,37 @@ import { useForm } from "react-hook-form";
 import InputComponent from "../../components/inputComponent/InputComponent.jsx";
 import {useState} from "react";
 import axios from "axios";
-import toast, {Toaster} from 'react-hot-toast';
+// import toast, {Toaster} from 'react-hot-toast';
+import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
+import {useNavigate} from "react-router-dom";
+import LoadingComponent from "../../components/loadingComponent/LoadingComponent.jsx";
 
 function RegisterPage() {
     const [error, toggleError] = useState(false);
+    const [loading, toggleLoading] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
-    const notify = () => toast('Registered successfully!')
+    // const notify = () => toast('Registered successfully!')
+    const navigate = useNavigate();
 
     async function handleFormSubmit(data) {
         toggleError(false);
+        toggleLoading(true);
 
         try {
-            const response = await axios.post("http://localhost:8080/users",
-                data,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-            console.log(response);
-            console.log(response.data);
+            await axios.post("http://localhost:8080/users",
+            data,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+
         } catch (e) {
             console.error(e);
             toggleError(true);
         } finally {
-            notify();
+            toggleLoading(false);
+            navigate('/success' , {state: {registered: true }});
         }
     }
 
@@ -80,7 +86,7 @@ function RegisterPage() {
                                 errors={errors}
                             />
                             <InputComponent
-                                inputType="text"
+                                inputType="password"
                                 inputName="password"
                                 inputId="password-field"
                                 inputLabel="Password"
@@ -101,13 +107,13 @@ function RegisterPage() {
                                 register={register}
                                 errors={errors}
                             />
-                            <button type="submit" className="btn btn-small">Register</button>
+                            <ButtonComponent type="submit" classNames="btn-small btn-inverted" buttonText="Register" />
                         </form>
                     </div>
                     { error && <p>Something went wrong!!</p>}
                 </VisualTextBlock>
             </section>
-            <Toaster />
+            { loading && <LoadingComponent text="Registering...please wait!!" />}
         </main>
     );
 }

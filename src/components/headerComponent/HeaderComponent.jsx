@@ -1,9 +1,10 @@
-import './Header.scss';
+import './HeaderComponent.scss';
 import {useContext, useState} from "react";
 import {NavLink} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext.jsx";
+import logo from "../../assets/images/logo.png"
 
-function Header() {
+function HeaderComponent() {
 
     const [isActive, setActive] = useState("false");
     const ToggleClass = () => {
@@ -12,18 +13,14 @@ function Header() {
 
     const { userId, isAuth, logout } = useContext(AuthContext);
 
-    //const userLink = `/user/${auth.user}`;
-    console.log(userId);
-
-
     return (
         <header>
             <div className="container flexBox">
-                <div className="flexBox justify-content-flex-start">
+                <div className="flexBox justify-content-flex-start text-align-center">
                     <button className="btnReset menuBtn" onClick={ToggleClass}>
-                        <i className={!isActive ? "fa-solid fa-xmark" : "fa-solid fa-bars"}></i
-                        ></button>
-                    <NavLink to="/">BeatsForSale</NavLink>
+                        <i className={!isActive ? "fa-solid fa-xmark" : "fa-solid fa-bars"}></i>
+                    </button>
+                    <NavLink to="/" className="flexBox"><img className="logo" src={logo} /></NavLink>
                 </div>
                 <nav>
                     <ul className="flexBox gap-2">
@@ -42,9 +39,9 @@ function Header() {
 
                     <div className="flexBox gap-1">
                         { !isAuth ?
-                            <NavLink className="btn btn-border" to="/login">login</NavLink> :
+                            <NavLink className="btn btn-inverted" to="/login">login</NavLink> :
                             <>
-                                <button className="btn btn-border" onClick={logout}>Logout</button>
+                                <button className="btn btn-inverted" onClick={logout}>Logout</button>
                                 <NavLink to={`/user/${userId}`}><i className="fa-solid fa-user"></i></NavLink>
                             </>
                         }
@@ -64,4 +61,4 @@ function Header() {
     );
 }
 
-export default Header;
+export default HeaderComponent;

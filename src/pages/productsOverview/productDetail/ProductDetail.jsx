@@ -1,10 +1,12 @@
 import './ProductDetail.scss';
 import {useParams} from "react-router-dom";
-import {useContext, useEffect, useState} from "react";
+import {useRef, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {AuthContext} from "../../../context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
 import toast, {Toaster} from 'react-hot-toast';
+import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
+import ButtonComponent from "../../../components/buttonComponent/ButtonComponent.jsx";
+import Popup from "reactjs-popup";
 
 function ProductDetail() {
     const [beat, setBeat] = useState({});
@@ -13,6 +15,8 @@ function ProductDetail() {
     const {isAuth} = useContext(AuthContext);
     const notifyLogin = () => toast('Login to buy beats!');
     const notifyBought = () => toast('Beat successfully added to your profile!');
+    const ref = useRef();
+    const closeTooltip = () => ref.current.close();
 
     useEffect(() => {
         async function fetchBeat() {
@@ -25,7 +29,6 @@ function ProductDetail() {
                         'Content-Type': 'application/json'
                     }
                 });
-                console.log(response.data);
 
                 setBeat(response.data);
             } catch (e) {
@@ -50,18 +53,18 @@ function ProductDetail() {
             let date = new Date().toISOString();
             date = date.replace(/Z$/, '');
 
-            console.log(date);
-
             const orderDate = { orderDate : date };
 
             try {
-                const response = await axios.post('http://localhost:8080/orders', orderDate);
-
-                console.log(response.data);
-
-                await assignUser(response.data.id);
+                const response = await axios.post('http://localhost:8080/orders', orderDate, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
 
                 await assignBeat(response.data.id);
+                await assignUser(response.data.id);
 
             } catch (e) {
                 console.error(e);
@@ -69,9 +72,6 @@ function ProductDetail() {
                 toggleError(true);
             } finally {
                 toggleLoading(false);
-
-                notifyBought();
-
             }
 
         }
@@ -82,11 +82,14 @@ function ProductDetail() {
         toggleError(false);
 
         try {
-            const response = await axios.put(`http://localhost:8080/orders/${id}/beat/${beat.id}`);
-            console.log(response.data);
+            await axios.put(`http://localhost:8080/orders/${id}/beat/${beat.id}`, null, {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
 
         } catch (e) {
-            console.error(e);
+            console.error(e.response.data);
 
             toggleError(true);
         } finally {
@@ -99,12 +102,17 @@ function ProductDetail() {
         toggleError(false);
 
         try {
-            const response = await axios.put(`http://localhost:8080/orders/${id}/user/${localStorage.getItem('id')}`);
+            await axios.put(`http://localhost:8080/orders/${id}/user/${localStorage.getItem('id')}`, null, {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
 
-            console.log(response.data);
+            closeTooltip()
+            notifyBought();
 
         } catch (e) {
-            console.error(e);
+            console.error(e.response.data);
 
             toggleError(true);
         } finally {
@@ -113,37 +121,61 @@ function ProductDetail() {
     }
 
 
-
     const {id} = useParams();
 
     return (
         <main>
-            <Toaster />
+            <Toaster position="bottom-center" reverseOrder={false} />
+
             <section className="main-content-block">
-                <div className="container small-container ">
-                    <div className="detail-page justify-content-flex-start flexBox align-items-top gap-2 w-100">
-                        <div className="detail-page-image"></div>
+                <div className="container extra-small-container ">
+                    <div className="detail-page w-100">
                         <div className="detail-page-info">
                             { Object.keys(beat).length > 0 ?
                                 <>
-                                    <h4>Title: {beat.title}</h4>
-                                    <h5>{beat.userId}</h5>
-                                    <ul>
-                                        <li>{beat.bpm}</li>
-                                        <li>{beat.price}</li>
-                                    </ul>
-                                    <audio controls controlsList="nodownload">
-                                        <source src={`http://localhost:8080/beats/${beat.id}/file`}
-                                                type="audio/mpeg">
-                                        </source>
-                                        The browser doesn't support this audio!
-                                    </audio>
-                                    <br /><br />
+                                    <div className="flexBox no-wrap gap-1 title-block">
+                                        <h2>{beat.title}</h2>
+                                        <a href="/beats" className="btn btn-small btn-inverted">
+                                            <i className="fa-solid fa-chevron-left"></i> <span className="hide-on-mobile">Back to overview</span>
+                                        </a>
+                                    </div>
+                                    <BeatBlock artist={beat.userName} bpm={beat.bpm} price={beat.price} image={`http://localhost:8080/beats/${beat.id}/image`} error={error}>
 
-                                    <button className="btn btn" onClick={placeOrder}>
-                                        BUY
-                                        <i className="fa-solid fa-cart-shopping"></i>
-                                    </button>
+                                        <Popup ref={ref} trigger={<button className="btn btn-small btn-inverted">get this beat</button>} modal>
+                                            {close => (
+                                                <div className="popup popup-detail-page">
+
+
+                                                    <h3>You are about to buy a beat</h3>
+                                                    <p>Are you sure?</p>
+                                                    <div className="flexBox gap-1 justify-content-flex-start">
+                                                        <ButtonComponent classNames="btn-small btn-inverted" buttonText="cancel" buttonFunction={close}
+                                                        />
+                                                        <ButtonComponent classNames="btn-small" buttonText="buy" noteIcon={true} buttonFunction={() => placeOrder()}  />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </Popup>
+                                    </BeatBlock>
+
+                                    <div className="audio-block">
+                                        <audio controls controlsList="nodownload">
+                                            <source src={`http://localhost:8080/beats/${beat.id}/file`}
+                                                    type="audio/mpeg">
+                                            </source>
+                                            The browser doesn't support this audio!
+                                        </audio>
+                                    </div>
+
+                                    <h3 className="text-transform-uppercase">Reviews</h3>
+                                    <ul>
+                                        { beat.reviews.length > 0 ? beat.reviews.map((review) =>
+
+                                            <li key={review.id}><span className="font-weight-700 text-transform-uppercase" key={ review.id }>{ review.username }</span> <br /> score: { review.score } <br/> "{ review.comment }"</li>
+                                            ) :
+                                            <li>No reviews yet</li>
+                                        }
+                                    </ul>
 
                                     </> : <p>Deze beat is niet beschikbaar</p>
                             }
@@ -152,17 +184,7 @@ function ProductDetail() {
                             {beat.length === 0 && error && <p>Er ging iets mis bij het ophalen van de data...</p>}
                             </div>
                         </div>
-                        <h3>Reviews</h3>
 
-                        <ul>
-                            { Object.keys(beat).length > 0 &&
-                            beat.reviews.length > 0 ? beat.reviews.map((review) =>
-
-                                    <li>{ review.username } - score: { review.score } <br/> "{ review.comment }"</li>
-                                ) :
-                                <li>No reviews yet</li>
-                            }
-                        </ul>
                     </div>
 
 

@@ -3,19 +3,14 @@ import {useEffect, useRef, useState} from "react";
 import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
 import Popup from "reactjs-popup";
 import InputComponent from "../../../components/inputComponent/InputComponent.jsx";
-import toast, {Toaster} from "react-hot-toast";
 import {useForm} from "react-hook-form";
 
 
-function AdminTab() {
+function AdminTab({ toggleLoading, notify }) {
     const [currentBeat, setCurrentBeat] = useState({});
     const [error, toggleError] = useState(false);
-    const [loading, toggleLoading] = useState(false);
     const [users, setUsers] = useState({});
-    const { register, handleSubmit, formState: {errors} } = useForm();
-
-
-    const notify = () => toast('Beat successfully changed!')
+    const { register, handleSubmit, reset, formState: {errors} } = useForm();
     const ref = useRef();
     const closeTooltip = () => ref.current.close();
     const openTooltip = () => ref.current.open();
@@ -29,8 +24,11 @@ function AdminTab() {
         toggleError(false);
 
         try {
-            const response = await axios.get('http://localhost:8080/users');
-            console.log(response.data);
+            const response = await axios.get('http://localhost:8080/users', {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
 
             setUsers(response.data);
         } catch (e) {
@@ -44,26 +42,27 @@ function AdminTab() {
     }
 
     async function handleFormSubmit(data) {
-
-        console.log(data);
-
         toggleError(false);
+        toggleLoading(true);
 
         try {
-            const responseData = await axios.put(`http://localhost:8080/beats/${currentBeat.id}`, data);
-
-            console.log(responseData);
-
+            await axios.put(`http://localhost:8080/beats/${currentBeat.id}`, data, {
+                headers: {
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
 
             closeTooltip();
-            notify();
 
         } catch (e) {
             console.error(e);
 
             toggleError(true);
         } finally {
+            toggleLoading(false);
 
+            notify()
+            reset();
             await fetchUsers();
         }
     }
@@ -72,20 +71,17 @@ function AdminTab() {
         <>
             <h2>Admin</h2>
 
-            <h3>All users</h3>
+            <h3 className="text-transform-uppercase">All users</h3>
             <ul>
                 { users.length > 0 ? users.map((user) =>
-                    <li>
-                        <div  className="flexBox">
-                            <div className="flex-50"><span className="font-weight-600">Id:</span> { user.id }</div>
-                            <div className="flex-50"><span className="font-weight-600">Username:</span> { user.username }</div>
-                        </div>
+                    <li key={user.id} className="inverted">
+                        <h4 className="text-transform-uppercase">Username: { user.username }</h4>
 
                         { Object.keys(user).length > 0 &&
 
-                        user.beats.length > 0 ? user.beats.map((beat) =>
-                            <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
-                                <button className="btn btn-small btn-border btnReset" onClick={() => {
+                        user.beats.length > 0 ? user.beats.sort((a, b) => a.id - b.id).map((beat) =>
+                            <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price} key={beat.id} image={`http://localhost:8080/beats/${beat.id}/image`}>
+                                <button className="btn btn-small" onClick={() => {
                                     setCurrentBeat(beat);
                                     openTooltip();
                                 }}>
@@ -97,6 +93,7 @@ function AdminTab() {
                     </li>
                 ) : <li>No users found!</li>}
             </ul>
+            {error && <p>Something went wrong, please try again.</p>}
 
             <Popup ref={ref} modal>
                 {close => (
@@ -105,7 +102,7 @@ function AdminTab() {
                         <a className="close" onClick={close}>
                             <i className="fa-solid fa-xmark"></i>
                         </a>
-                        <h3>Add a beat</h3>
+                        <h3>Change the beat</h3>
                         <div className="form-block">
                             <form onSubmit={handleSubmit(handleFormSubmit)}>
                                 <InputComponent
@@ -182,10 +179,7 @@ function AdminTab() {
                     </div>
                 )}
             </Popup>
-            <Toaster position="bottom-center" reverseOrder={false} />
-
         </>
-
     );
 }
 

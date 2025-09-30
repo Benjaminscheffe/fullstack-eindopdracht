@@ -1,4 +1,3 @@
-import './RegisterSuccessPage.scss';
 import {Link} from "react-router-dom";
 
 function RegisterSuccessPage() {

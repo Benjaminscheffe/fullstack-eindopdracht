@@ -1,23 +1,34 @@
-h1 {
-  margin-bottom: 1em;
-}
+.user-page {
+  h1, h2 {
+    margin-bottom: 1em;
+  }
 
-.asideLink{
-  border-left: 3px solid transparent;
-  padding: 0 0 0 0.5rem;
-  margin-bottom: 0.5rem;
-  line-height: 1.2;
-  cursor: pointer;
+  .asideLink{
+    border-left: 3px solid transparent;
+    padding: 0 0 0 0.5rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.2;
+    cursor: pointer;
 
-  &.active {
-    border-color: #000;
+    &.active {
+      border-color: #FFF;
+    }
+  }
+
+  @media only screen and (max-width: 767px) {
+    aside {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid #000;
+    }
+  }
+
+  .order-block .beat-block {
+    margin-top: 0.5rem;
+  }
+
+  #toast-container > div {
+    opacity:1 !important;
   }
 }
 
-@media only screen and (max-width: 767px) {
-  aside {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid #000;
-  }
-}

@@ -10,7 +10,7 @@ function Landingpage() {
                 <div className="container hero-inner">
                     <div className="text-align-center">
                         <h1>start your music journey as creator</h1>
-                        <Link to="/beats" className="btn">get / drop your beats</Link>
+                        <Link to="/beats" className="btn">get your beats</Link>
                     </div>
                 </div>
 

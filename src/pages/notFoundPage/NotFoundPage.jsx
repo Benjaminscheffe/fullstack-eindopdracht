@@ -1,5 +1,3 @@
-import './NotFoundPage.scss';
-
 function NotFoundPage() {
     return (
         <main className="container small-container flexBox justify-content-center">

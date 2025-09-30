@@ -5,19 +5,18 @@ import newyork from "../../../assets/images/newyork-panorama.jpg";
 import axios from "axios";
 import {useRef, useState} from "react";
 import {useForm} from "react-hook-form";
-import toast, {Toaster} from 'react-hot-toast';
+import {useNavigate} from "react-router-dom";
 
-function BeatsTab({ user, error, toggleError, fetchUser }) {
+function BeatsTab({ user, error, toggleError, toggleLoading }) {
     const [file, setFile] = useState([]);
     const [image, setImage] = useState([]);
     const { register, handleSubmit, formState: {errors} } = useForm();
-    const notify = () => toast('Beat added successfully!')
-
+    const navigate = useNavigate();
     const ref = useRef();
-    const closeTooltip = () => ref.current.close();
 
     async function handleFormSubmit(data) {
         toggleError(false);
+        toggleLoading(true)
 
         data.userId = user.id;
 
@@ -28,48 +27,46 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
         formImage.append("file", image);
 
         try {
-            const responseData = await axios.post(`http://localhost:8080/beats`, data);
-
-            console.log(responseData.data.id);
-
-            const responseFile = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/file`, formFile, {
+            const responseData = await axios.post(`http://localhost:8080/beats`, data, {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    'Content-Type': 'application/json',
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
 
-            const responseImage = await axios.post(`http://localhost:8080/beats/${responseData.data.id}/image`, formImage, {
+            await axios.post(`http://localhost:8080/beats/${responseData.data.id}/file`, formFile, {
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data",
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
 
-            console.log(responseFile.data);
+            await axios.post(`http://localhost:8080/beats/${responseData.data.id}/image`, formImage, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    'Authorization' : `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            
+            navigate('/success' , {state: {beatId: responseData.data.id}});
 
-            console.log(responseImage.data);
-
-            closeTooltip();
-            notify();
 
         } catch (e) {
             console.error(e);
 
             toggleError(true);
         } finally {
-
-            //fetchUser();
+            toggleLoading(false);
         }
     }
 
     function handleFileChange(e) {
         const uploadedFile = e.target.files[0];
-        console.log(uploadedFile);
         setFile(uploadedFile);
     }
 
     function handleImageChange(e) {
         const uploadedImageFile = e.target.files[0];
-        console.log(uploadedImageFile);
         setImage(uploadedImageFile);
     }
 
@@ -80,15 +77,12 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
 
             { Object.keys(user).length > 0 &&
 
-            user.beats.length > 0 ? user.beats.map((beat) =>
-                <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
-                    <button className="btn btn-small btn-border btnReset">
-                        Edit <i className="fa-solid fa-gear"></i>
-                    </button>
+            user.beats.length > 0 ? user.beats.sort((a, b) => a.id - b.id).map((beat) =>
+                <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price} key={ beat.id } image={`http://localhost:8080/beats/${beat.id}/image`}>
                 </BeatBlock>) : <p>No beats</p>
             }
 
-            <Popup ref={ref} trigger={<button className="btn btn-small">Add a beat <i className="fa-solid fa-music"></i></button>} modal>
+            <Popup ref={ref} trigger={<button className="btn btn-small btn-inverted">Add a beat <i className="fa-solid fa-music"></i></button>} modal>
                 {close => (
                     <div className="popup">
 
@@ -167,8 +161,9 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
                                 <InputComponent
                                     inputType="file"
                                     inputName="file"
+                                    accept=".mp3"
                                     inputId="file-field"
-                                    inputLabel="Music File"
+                                    inputLabel="Music File (max filesize 10mb)"
                                     validationRules={{
                                         required:  {
                                             value: true,
@@ -181,9 +176,10 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
                                 />
                                 <InputComponent
                                     inputType="file"
+                                    accept=".jpg, .jpeg"
                                     inputName="image"
                                     inputId="image-field"
-                                    inputLabel="Image"
+                                    inputLabel="Image  (max filesize 1mb)"
                                     validationRules={{
                                         required:  {
                                             value: true,
@@ -196,14 +192,13 @@ function BeatsTab({ user, error, toggleError, fetchUser }) {
                                 />
                                 <button type="submit" className="btn btn-small">Add</button>
                             </form>
-                            {error && <p>Something went wrong, please try again.</p>}
+                            {error && <p className="error-message">Something went wrong, please try again!</p>}
                         </div>
                         <img src={newyork} alt="New York Panorama" />
 
                     </div>
                 )}
             </Popup>
-            <Toaster />
         </>
     );
 }
