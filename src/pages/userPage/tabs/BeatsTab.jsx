@@ -77,7 +77,7 @@ function BeatsTab({ user, error, toggleError, toggleLoading }) {
 
             { Object.keys(user).length > 0 &&
 
-            user.beats.length > 0 ? user.beats.map((beat) =>
+            user.beats.length > 0 ? user.beats.sort((a, b) => a.id - b.id).map((beat) =>
                 <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price} key={ beat.id } image={`http://localhost:8080/beats/${beat.id}/image`}>
                 </BeatBlock>) : <p>No beats</p>
             }
@@ -163,7 +163,7 @@ function BeatsTab({ user, error, toggleError, toggleLoading }) {
                                     inputName="file"
                                     accept=".mp3"
                                     inputId="file-field"
-                                    inputLabel="Music File"
+                                    inputLabel="Music File (max filesize 10mb)"
                                     validationRules={{
                                         required:  {
                                             value: true,
@@ -179,7 +179,7 @@ function BeatsTab({ user, error, toggleError, toggleLoading }) {
                                     accept=".jpg, .jpeg"
                                     inputName="image"
                                     inputId="image-field"
-                                    inputLabel="Image"
+                                    inputLabel="Image  (max filesize 1mb)"
                                     validationRules={{
                                         required:  {
                                             value: true,
@@ -192,7 +192,7 @@ function BeatsTab({ user, error, toggleError, toggleLoading }) {
                                 />
                                 <button type="submit" className="btn btn-small">Add</button>
                             </form>
-                            {error && <p>Something went wrong, please try again.</p>}
+                            {error && <p className="error-message">Something went wrong, please try again!</p>}
                         </div>
                         <img src={newyork} alt="New York Panorama" />
 

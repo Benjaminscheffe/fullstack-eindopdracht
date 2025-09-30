@@ -319,6 +319,7 @@ img {
 
   &-inverted {
     background-color: #FFF;
+    border: 1px solid #FFF;
     color: #121212;
 
     i {
@@ -328,7 +329,6 @@ img {
     &:hover {
       background: #121212;
       color: #FFF;
-      border: 1px solid #FFF;
 
       i {
         color: #FFF;
@@ -350,7 +350,6 @@ img {
     border: 1px solid #FFF;
   }
 }
-
 
 /*////////////////////////
     2. Typography
@@ -457,7 +456,7 @@ input {
 }
 
 .error-message {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-style: italic;
   font-weight: 700;
   color: #FF0000;

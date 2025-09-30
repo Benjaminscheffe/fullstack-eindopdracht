@@ -23,7 +23,7 @@
       }
 
       &-cta {
-        width: 100%;
+        flex: 0 0 100%;
 
         button {
           width: 100%;
@@ -47,6 +47,22 @@
       margin-bottom: 0;
        span {
          font-weight: 700;
+      }
+    }
+  }
+
+  .inverted {
+    background: #FFF;
+    padding: 1rem 1rem 0 1rem;
+    color: #121212;
+    margin-bottom: 1rem;
+    display: block;
+
+    .beat-block {
+      border-bottom: 1px solid #121212;
+
+      &:last-of-type {
+        border: none;
       }
     }
   }

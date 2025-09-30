@@ -46,7 +46,7 @@ function OrderTabs({ user, error, toggleError, toggleLoading, notify }) {
           <h2>My Orders</h2>
           <ul>
               { Object.keys(user).length > 0 &&
-              user.orderList.length > 0 ? user.orderList.map((order) =>
+              user.orderList.length > 0 ? user.orderList.sort((a, b) => a.id - b.id).map((order) =>
 
                   <li key={order.id}>
                       <ul className="order-block">

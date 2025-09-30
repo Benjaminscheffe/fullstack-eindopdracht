@@ -74,14 +74,14 @@ function AdminTab({ toggleLoading, notify }) {
             <h3 className="text-transform-uppercase">All users</h3>
             <ul>
                 { users.length > 0 ? users.map((user) =>
-                    <li key={user.id}>
-                        <h4>Username: { user.username }</h4>
+                    <li key={user.id} className="inverted">
+                        <h4 className="text-transform-uppercase">Username: { user.username }</h4>
 
                         { Object.keys(user).length > 0 &&
 
-                        user.beats.length > 0 ? user.beats.map((beat) =>
-                            <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price} key={beat.id} image={`http://localhost:8080/beats/${beat.id}/image`}>
-                                <button className="btn btn-small btn-inverted" onClick={() => {
+                        user.beats.length > 0 ? user.beats.sort((a, b) => a.id - b.id).map((beat) =>
+                            <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price} key={beat.id} image={`http://localhost:8080/beats/${beat.id}/image`}>
+                                <button className="btn btn-small" onClick={() => {
                                     setCurrentBeat(beat);
                                     openTooltip();
                                 }}>

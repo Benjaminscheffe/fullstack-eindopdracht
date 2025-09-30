@@ -1,4 +1,3 @@
-import './ProductsOverview.scss';
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import BeatBlock from "../../components/beatBlock/BeatBlock.jsx";
@@ -17,8 +16,6 @@ function ProductsOverview() {
 
             try {
                 const response = await axios.get('http://localhost:8080/beats');
-
-                console.log(response.data);
 
                 setBeats(response.data);
 
@@ -47,8 +44,8 @@ function ProductsOverview() {
                 <div className="container extra-small-container">
 
                     <div className="beats-container">
-                        { beats.length > 0 ? beats.map((beat) =>
-                            <BeatBlock title={beat.title} artist={beat.userName} bpm={beat.bpm} image={`http://localhost:8080/beats/${beat.id}/image`} error={error}>
+                        { beats.length > 0 ? beats.sort((a, b) => a.id - b.id).map((beat) =>
+                            <BeatBlock title={beat.title} key={beat.id} artist={beat.userName} bpm={beat.bpm} image={`http://localhost:8080/beats/${beat.id}/image`} error={error}>
                                 <ButtonComponent classNames="btn-small btn-border btn-inverted" buttonText="Go to the beat" noteIcon={true} buttonFunction={() => location.href=`/beats/${beat.id}`}  />
                             </BeatBlock>
                         ) : <p>Geen beats beschikbaar op dit moment</p>}

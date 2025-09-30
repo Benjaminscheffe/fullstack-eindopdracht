@@ -1,4 +1,3 @@
-import './SuccessPage.scss';
 import {Link} from "react-router-dom";
 import {AuthContext} from "../../context/AuthContext.jsx";
 import {useContext} from "react";

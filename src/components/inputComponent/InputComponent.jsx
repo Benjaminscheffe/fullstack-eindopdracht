@@ -1,5 +1,3 @@
-import './InputComponent.scss';
-
 function InputComponent({ inputType, inputName, inputLabel, inputId, validationRules, register, errors, onChange, accept }) {
     return (
         <label htmlFor={inputId}>

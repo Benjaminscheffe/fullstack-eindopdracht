@@ -1,4 +1,3 @@
-import './LoginPage.scss';
 import VisualTextBlock from "../../components/visualTextBlock/VisualTextBlock.jsx";
 import {Link} from "react-router-dom";
 import React, {useContext, useState} from "react";
