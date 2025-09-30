@@ -15,7 +15,6 @@ function LoginPage() {
     const { register, handleSubmit, formState: {errors} } = useForm();
 
     async function handleFormSubmit(data) {
-        console.log(login);
         toggleError(false);
 
         try {
@@ -24,8 +23,6 @@ function LoginPage() {
                     'Content-Type': 'application/json',
                 }
             })
-
-            console.log(response.data);
 
             login(response.data);
         } catch (e) {

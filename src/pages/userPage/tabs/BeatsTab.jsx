@@ -7,7 +7,7 @@ import {useRef, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 
-function BeatsTab({ user, error, toggleError }) {
+function BeatsTab({ user, error, toggleError, toggleLoading }) {
     const [file, setFile] = useState([]);
     const [image, setImage] = useState([]);
     const { register, handleSubmit, formState: {errors} } = useForm();
@@ -16,6 +16,7 @@ function BeatsTab({ user, error, toggleError }) {
 
     async function handleFormSubmit(data) {
         toggleError(false);
+        toggleLoading(true)
 
         data.userId = user.id;
 
@@ -33,7 +34,6 @@ function BeatsTab({ user, error, toggleError }) {
                 }
             });
 
-
             await axios.post(`http://localhost:8080/beats/${responseData.data.id}/file`, formFile, {
                 headers: {
                     "Content-Type": "multipart/form-data",
@@ -47,7 +47,6 @@ function BeatsTab({ user, error, toggleError }) {
                     'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
-            console.log(responseData.data.id);
             
             navigate('/success' , {state: {beatId: responseData.data.id}});
 
@@ -57,20 +56,17 @@ function BeatsTab({ user, error, toggleError }) {
 
             toggleError(true);
         } finally {
-
-            //fetchUser();
+            toggleLoading(false);
         }
     }
 
     function handleFileChange(e) {
         const uploadedFile = e.target.files[0];
-        console.log(uploadedFile);
         setFile(uploadedFile);
     }
 
     function handleImageChange(e) {
         const uploadedImageFile = e.target.files[0];
-        console.log(uploadedImageFile);
         setImage(uploadedImageFile);
     }
 
@@ -82,7 +78,7 @@ function BeatsTab({ user, error, toggleError }) {
             { Object.keys(user).length > 0 &&
 
             user.beats.length > 0 ? user.beats.map((beat) =>
-                <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
+                <BeatBlock title={beat.title} bpm={beat.bpm} price={beat.price} key={ beat.id } image={`http://localhost:8080/beats/${beat.id}/image`}>
                 </BeatBlock>) : <p>No beats</p>
             }
 
@@ -165,6 +161,7 @@ function BeatsTab({ user, error, toggleError }) {
                                 <InputComponent
                                     inputType="file"
                                     inputName="file"
+                                    accept=".mp3"
                                     inputId="file-field"
                                     inputLabel="Music File"
                                     validationRules={{
@@ -179,6 +176,7 @@ function BeatsTab({ user, error, toggleError }) {
                                 />
                                 <InputComponent
                                     inputType="file"
+                                    accept=".jpg, .jpeg"
                                     inputName="image"
                                     inputId="image-field"
                                     inputLabel="Image"

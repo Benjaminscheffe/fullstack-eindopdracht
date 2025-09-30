@@ -13,10 +13,6 @@ function HeaderComponent() {
 
     const { userId, isAuth, logout } = useContext(AuthContext);
 
-    //const userLink = `/user/${auth.user}`;
-    console.log(userId);
-
-
     return (
         <header>
             <div className="container flexBox">
@@ -43,9 +39,9 @@ function HeaderComponent() {
 
                     <div className="flexBox gap-1">
                         { !isAuth ?
-                            <NavLink className="btn btn-border" to="/login">login</NavLink> :
+                            <NavLink className="btn btn-inverted" to="/login">login</NavLink> :
                             <>
-                                <button className="btn btn-border" onClick={logout}>Logout</button>
+                                <button className="btn btn-inverted" onClick={logout}>Logout</button>
                                 <NavLink to={`/user/${userId}`}><i className="fa-solid fa-user"></i></NavLink>
                             </>
                         }

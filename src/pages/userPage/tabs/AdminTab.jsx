@@ -3,19 +3,14 @@ import {useEffect, useRef, useState} from "react";
 import BeatBlock from "../../../components/beatBlock/BeatBlock.jsx";
 import Popup from "reactjs-popup";
 import InputComponent from "../../../components/inputComponent/InputComponent.jsx";
-import toast, {Toaster} from "react-hot-toast";
 import {useForm} from "react-hook-form";
 
 
-function AdminTab() {
+function AdminTab({ toggleLoading, notify }) {
     const [currentBeat, setCurrentBeat] = useState({});
     const [error, toggleError] = useState(false);
-    const [loading, toggleLoading] = useState(false);
     const [users, setUsers] = useState({});
-    const { register, handleSubmit, formState: {errors} } = useForm();
-
-
-    const notify = () => toast('Beat successfully changed!')
+    const { register, handleSubmit, reset, formState: {errors} } = useForm();
     const ref = useRef();
     const closeTooltip = () => ref.current.close();
     const openTooltip = () => ref.current.open();
@@ -34,7 +29,6 @@ function AdminTab() {
                     'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
-            console.log(response.data);
 
             setUsers(response.data);
         } catch (e) {
@@ -48,30 +42,27 @@ function AdminTab() {
     }
 
     async function handleFormSubmit(data) {
-
-        console.log(data);
-
         toggleError(false);
+        toggleLoading(true);
 
         try {
-            const responseData = await axios.put(`http://localhost:8080/beats/${currentBeat.id}`, data, {
+            await axios.put(`http://localhost:8080/beats/${currentBeat.id}`, data, {
                 headers: {
                     'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
 
-            console.log(responseData);
-
-
             closeTooltip();
-            notify();
 
         } catch (e) {
             console.error(e);
 
             toggleError(true);
         } finally {
+            toggleLoading(false);
 
+            notify()
+            reset();
             await fetchUsers();
         }
     }
@@ -83,13 +74,13 @@ function AdminTab() {
             <h3 className="text-transform-uppercase">All users</h3>
             <ul>
                 { users.length > 0 ? users.map((user) =>
-                    <li>
+                    <li key={user.id}>
                         <h4>Username: { user.username }</h4>
 
                         { Object.keys(user).length > 0 &&
 
                         user.beats.length > 0 ? user.beats.map((beat) =>
-                            <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price}  image={`http://localhost:8080/beats/${beat.id}/image`}>
+                            <BeatBlock title={beat.title} artist="artist 1" bpm={beat.bpm} price={beat.price} key={beat.id} image={`http://localhost:8080/beats/${beat.id}/image`}>
                                 <button className="btn btn-small btn-inverted" onClick={() => {
                                     setCurrentBeat(beat);
                                     openTooltip();
@@ -102,6 +93,7 @@ function AdminTab() {
                     </li>
                 ) : <li>No users found!</li>}
             </ul>
+            {error && <p>Something went wrong, please try again.</p>}
 
             <Popup ref={ref} modal>
                 {close => (
@@ -187,10 +179,7 @@ function AdminTab() {
                     </div>
                 )}
             </Popup>
-            <Toaster position="bottom-center" reverseOrder={false} />
-
         </>
-
     );
 }
 

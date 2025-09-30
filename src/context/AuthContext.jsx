@@ -16,15 +16,12 @@ function AuthContentProvider({ children }) {
 
     async function checkAuthentication() {
         try {
-            const response = await axios.get("http://localhost:8080/authenticated", {
+            return await axios.get("http://localhost:8080/authenticated", {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${localStorage.getItem("token")}`
                 }
             })
-
-            return response;
-
         } catch (e) {
             console.error(e);
 
@@ -39,12 +36,9 @@ function AuthContentProvider({ children }) {
 
         if (token) {
             try {
+                checkAuthentication();
 
-                const response = checkAuthentication();
-
-                console.log(response);
                 const decoded = jwtDecode(token);
-                console.log(decoded);
 
                 if (isTokenValid(decoded)) {
                     // Ja dan halen wev de userinfo op en zetten we hem in de state
@@ -74,9 +68,6 @@ function AuthContentProvider({ children }) {
     const navigate = useNavigate();
 
     function login(userData) {
-
-        console.log(userData.id);
-
         localStorage.setItem('token', userData.jwt);
         localStorage.setItem('id', userData.id)
 
@@ -87,10 +78,6 @@ function AuthContentProvider({ children }) {
             user: userId,
             status: 'done',
         });
-
-        console.log(userData);
-
-        console.log(auth);
 
         navigate(`/user/${userData.id}`)
     }

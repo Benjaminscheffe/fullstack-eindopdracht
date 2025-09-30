@@ -1,4 +1,4 @@
-function ProfileTab({ user }) {
+function ProfileTab({ user, error }) {
     return (
         <>
             { Object.keys(user).length > 0 ?
@@ -17,6 +17,8 @@ function ProfileTab({ user }) {
                     </ul>
                 </> : <p>User details not available</p>
             }
+
+            {error && <p>Something went wrong, please try again.</p>}
         </>
 
     );

@@ -7,30 +7,33 @@ import axios from "axios";
 // import toast, {Toaster} from 'react-hot-toast';
 import ButtonComponent from "../../components/buttonComponent/ButtonComponent.jsx";
 import {useNavigate} from "react-router-dom";
+import LoadingComponent from "../../components/loadingComponent/LoadingComponent.jsx";
 
 function RegisterPage() {
     const [error, toggleError] = useState(false);
+    const [loading, toggleLoading] = useState(false);
     const { register, handleSubmit, formState: {errors} } = useForm();
     // const notify = () => toast('Registered successfully!')
     const navigate = useNavigate();
 
     async function handleFormSubmit(data) {
         toggleError(false);
+        toggleLoading(true);
 
         try {
-            const response = await axios.post("http://localhost:8080/users",
-                data,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-            console.log(response.data);
+            await axios.post("http://localhost:8080/users",
+            data,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
 
         } catch (e) {
             console.error(e);
             toggleError(true);
         } finally {
+            toggleLoading(false);
             navigate('/success' , {state: {registered: true }});
         }
     }
@@ -110,6 +113,7 @@ function RegisterPage() {
                     { error && <p>Something went wrong!!</p>}
                 </VisualTextBlock>
             </section>
+            { loading && <LoadingComponent text="Registering...please wait!!" />}
         </main>
     );
 }

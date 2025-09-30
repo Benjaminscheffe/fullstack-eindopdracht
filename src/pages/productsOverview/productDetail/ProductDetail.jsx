@@ -29,7 +29,6 @@ function ProductDetail() {
                         'Content-Type': 'application/json'
                     }
                 });
-                console.log(response.data);
 
                 setBeat(response.data);
             } catch (e) {
@@ -54,8 +53,6 @@ function ProductDetail() {
             let date = new Date().toISOString();
             date = date.replace(/Z$/, '');
 
-            console.log(date);
-
             const orderDate = { orderDate : date };
 
             try {
@@ -65,8 +62,6 @@ function ProductDetail() {
                         'Authorization' : `Bearer ${localStorage.getItem("token")}`
                     }
                 });
-
-                console.log(response.data);
 
                 await assignBeat(response.data.id);
                 await assignUser(response.data.id);
@@ -87,12 +82,11 @@ function ProductDetail() {
         toggleError(false);
 
         try {
-            const response = await axios.put(`http://localhost:8080/orders/${id}/beat/${beat.id}`, null, {
+            await axios.put(`http://localhost:8080/orders/${id}/beat/${beat.id}`, null, {
                 headers: {
                     'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
-            console.log(response.data);
 
         } catch (e) {
             console.error(e.response.data);
@@ -108,13 +102,12 @@ function ProductDetail() {
         toggleError(false);
 
         try {
-            const response = await axios.put(`http://localhost:8080/orders/${id}/user/${localStorage.getItem('id')}`, null, {
+            await axios.put(`http://localhost:8080/orders/${id}/user/${localStorage.getItem('id')}`, null, {
                 headers: {
                     'Authorization' : `Bearer ${localStorage.getItem("token")}`
                 }
             });
 
-            console.log(response.data);
             closeTooltip()
             notifyBought();
 
@@ -132,7 +125,7 @@ function ProductDetail() {
 
     return (
         <main>
-            <Toaster />
+            <Toaster position="bottom-center" reverseOrder={false} />
 
             <section className="main-content-block">
                 <div className="container extra-small-container ">
@@ -178,7 +171,7 @@ function ProductDetail() {
                                     <ul>
                                         { beat.reviews.length > 0 ? beat.reviews.map((review) =>
 
-                                            <li><span className="font-weight-700 text-transform-uppercase" key={ review.id }>{ review.username }</span> <br /> score: { review.score } <br/> "{ review.comment }"</li>
+                                            <li key={review.id}><span className="font-weight-700 text-transform-uppercase" key={ review.id }>{ review.username }</span> <br /> score: { review.score } <br/> "{ review.comment }"</li>
                                             ) :
                                             <li>No reviews yet</li>
                                         }
